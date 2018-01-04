@@ -1,0 +1,23 @@
+JOB_NAME="WordPress backup"
+BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
+MAX_SAVED_FILES=12
+
+WP_ROOT_PATH=/var/www/html
+DB_NAME=wordpress
+MYSQL_EXTRA_FILE=.my.cnf
+MYSQL_FILE=wordpress.sql
+
+S3_URI=
+AWS_PROFILE=
+
+EXCLUDE_EXTRA=(
+  ".git"
+  ".DS_Store"
+)
+
+EXCLUDE_WP_CONTENT=()
+
+EXCLUDE_WP_CORE=()
+
+LOG=log/history.log
+LOG_LIMIT=300
