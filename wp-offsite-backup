@@ -24,6 +24,11 @@ elif [ "$1" = "--config" ]; then
 fi
 
 logging() {
+  if [ ! $LOG_FILE ]; then
+    echo "Not Found LOG"
+    exit 1
+  fi
+
   if [ ! -f $LOG_FILE ]; then
     touch $LOG_FILE
   fi
