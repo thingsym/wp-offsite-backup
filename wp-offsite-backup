@@ -142,6 +142,22 @@ delete_backup_file() {
   fi
 }
 
+create_tmp_dir() {
+  if [ -d tmp ]; then
+    rm -rf tmp
+    echo "delete older tmp directory"
+  fi
+  echo "create tmp directory"
+  mkdir tmp
+}
+
+delete_tmp_dir() {
+  if [ -d tmp ]; then
+    rm -rf tmp
+    echo "delete tmp directory"
+  fi
+}
+
 load_config $1
 check_config
 backup_database
