@@ -76,9 +76,9 @@ check_config() {
 
 backup_database() {
   if [ -f "${BASEPATH}/config/${MYSQL_EXTRA_FILE}" ]; then
-    mysqldump --defaults-extra-file=$BASEPATH/config/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > $MYSQL_FILE
-    tar -rf ${BACKUP_NAME}.tar $MYSQL_FILE
-    rm $MYSQL_FILE
+    mysqldump --defaults-extra-file=$BASEPATH/config/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > tmp/$MYSQL_FILE
+    tar -rf tmp/${BACKUP_NAME}.tar --transform 's,^tmp/,database/,' tmp/$MYSQL_FILE
+    rm tmp/$MYSQL_FILE
     echo "backup database ${MYSQL_FILE}"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/config/${MYSQL_EXTRA_FILE}"
@@ -95,7 +95,7 @@ backup_wordpress() {
   }
 
   if [ -d "$WP_ROOT_PATH" ]; then
-    tar -rf ${BACKUP_NAME}.tar -C $WP_ROOT_PATH . $EXCLUDE_ARG
+    tar -rf tmp/${BACKUP_NAME}.tar -C $WP_ROOT_PATH . $EXCLUDE_ARG
     echo "backup WordPress files on ${WP_ROOT_PATH}"
   else
     echo "Not Found WP_ROOT_PATH $WP_ROOT_PATH"
@@ -103,7 +103,7 @@ backup_wordpress() {
 }
 
 create_backup_file() {
-  gzip ${BACKUP_NAME}.tar
+  gzip tmp/${BACKUP_NAME}.tar
   echo "backup file ${BACKUP_NAME}.tar.gz"
 }
 
@@ -122,7 +122,7 @@ store_s3() {
     echo "set aws profile: ${AWS_PROFILE}"
   fi
 
-  aws s3 mv ${BACKUP_NAME}.tar.gz $S3_URI
+  aws s3 mv tmp/${BACKUP_NAME}.tar.gz $S3_URI
   echo "backup ${BACKUP_NAME}.tar.gz to S3"
 
   S3_FILES=`aws s3 ls $S3_URI | wc -l`
@@ -160,19 +160,23 @@ delete_tmp_dir() {
 
 load_config $1
 check_config
-backup_database
-backup_wordpress
-
 if [ ! -f ${BACKUP_NAME}.tar ]; then
   echo "Not Found ${BACKUP_NAME}.tar"
   MESSAGE="[Error] [${CONFIG}] Not Found ${BACKUP_NAME}.tar"
   logging
   exit 1
 fi
-
-create_backup_file
-store_s3
-delete_backup_file
+create_tmp_dir
+if [ -d tmp ]; then
+  backup_database
+  backup_wordpress
+  create_backup_file
+  store_s3
+else
+  echo "Not Found tmp directory"
+  exit 1
+fi
+delete_tmp_dir
 
 MESSAGE="[Success] [${CONFIG}] WordPress Backup complete!"
 logging
