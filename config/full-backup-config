@@ -19,5 +19,5 @@ EXCLUDE_WP_CONTENT=()
 
 EXCLUDE_WP_CORE=()
 
-LOG=log/history.log
+LOG_FILE=log/history.log
 MAX_LOG_LINES=300

@@ -24,16 +24,16 @@ elif [ "$1" = "--config" ]; then
 fi
 
 logging() {
-  if [ ! -f $LOG ]; then
-    touch $LOG
+  if [ ! -f $LOG_FILE ]; then
+    touch $LOG_FILE
   fi
 
-  echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> $LOG
+  echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> $LOG_FILE
 
-  LOG_LINES=`cat $LOG | wc -l`
+  LOG_LINES=`cat $LOG_FILE | wc -l`
   if [ $MAX_LOG_LINES ] && [ 0 -lt $MAX_LOG_LINES ] && [ $LOG_LINES -gt $MAX_LOG_LINES ] ; then
-    cat $LOG | tail -n -$MAX_LOG_LINES > $LOG.new
-    mv $LOG.new $LOG
+    cat $LOG_FILE | tail -n -$MAX_LOG_LINES > $LOG_FILE.new
+    mv $LOG_FILE.new $LOG_FILE
   fi
 }
 

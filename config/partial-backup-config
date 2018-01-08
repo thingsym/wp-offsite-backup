@@ -44,5 +44,5 @@ EXCLUDE_WP_CORE=(
   "./wp-includes"
 )
 
-LOG=log/history.log
+LOG_FILE=log/history.log
 MAX_LOG_LINES=300
