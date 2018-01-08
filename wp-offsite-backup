@@ -43,7 +43,7 @@ load_config() {
   elif [ $WP_OFFSITE_BACKUP_CONFIG ]; then
     CONFIG=$WP_OFFSITE_BACKUP_CONFIG
   else
-    CONFIG=config
+    CONFIG=default
   fi
 
   if [ -f "${BASEPATH}/config/${CONFIG}" ]; then
