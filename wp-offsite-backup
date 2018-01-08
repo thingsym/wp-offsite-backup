@@ -103,6 +103,13 @@ backup_wordpress() {
 }
 
 create_backup_file() {
+  if [ ! -f tmp/${BACKUP_NAME}.tar ]; then
+    echo "Not Found ${BACKUP_NAME}.tar"
+    MESSAGE="[Error] [${CONFIG}] Not Found ${BACKUP_NAME}.tar"
+    logging
+    exit 1
+  fi
+
   gzip tmp/${BACKUP_NAME}.tar
   echo "backup file ${BACKUP_NAME}.tar.gz"
 }
@@ -153,12 +160,6 @@ delete_tmp_dir() {
 
 load_config $1
 check_config
-if [ ! -f ${BACKUP_NAME}.tar ]; then
-  echo "Not Found ${BACKUP_NAME}.tar"
-  MESSAGE="[Error] [${CONFIG}] Not Found ${BACKUP_NAME}.tar"
-  logging
-  exit 1
-fi
 create_tmp_dir
 if [ -d tmp ]; then
   backup_database
