@@ -25,7 +25,7 @@ fi
 
 logging() {
   if [ ! $LOG_FILE ]; then
-    echo "Not Found LOG"
+    echo "Not Found LOG file"
     exit 1
   fi
 
@@ -59,8 +59,6 @@ load_config() {
     echo "CONFIG: ${CONFIG}"
   else
     echo "Not Found CONFIG ${BASEPATH}/config/${CONFIG}"
-    MESSAGE="[Error] [${CONFIG}] Not Found CONFIG ${BASEPATH}/config/${CONFIG}"
-    logging
     exit 1
   fi
 }
