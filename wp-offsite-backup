@@ -31,8 +31,8 @@ logging() {
   echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> $LOG
 
   LOG_LINES=`cat $LOG | wc -l`
-  if [ $MAX_LOG_LIMIT ] && [ 0 -lt $MAX_LOG_LIMIT ] && [ $LOG_LINES -gt $MAX_LOG_LIMIT ] ; then
-    cat $LOG | tail -n -$MAX_LOG_LIMIT > $LOG.new
+  if [ $MAX_LOG_LINES ] && [ 0 -lt $MAX_LOG_LINES ] && [ $LOG_LINES -gt $MAX_LOG_LINES ] ; then
+    cat $LOG | tail -n -$MAX_LOG_LINES > $LOG.new
     mv $LOG.new $LOG
   fi
 }
