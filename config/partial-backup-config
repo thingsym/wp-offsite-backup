@@ -1,4 +1,4 @@
-JOB_NAME="WordPress partial backup (wp-content only)"
+JOB_NAME="WordPress partial backup (wp-content and database)"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
 MAX_SAVED_FILES=12
 
