@@ -135,13 +135,6 @@ store_s3() {
   fi
 }
 
-delete_backup_file() {
-  if [ -f ${BACKUP_NAME}.tar.gz ]; then
-    rm ${BACKUP_NAME}.tar.gz
-    echo "delete local stored backup file: ${BACKUP_NAME}.tar.gz"
-  fi
-}
-
 create_tmp_dir() {
   if [ -d tmp ]; then
     rm -rf tmp
