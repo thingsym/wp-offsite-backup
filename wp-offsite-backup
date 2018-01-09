@@ -13,6 +13,7 @@ set -e
 BASEPATH=$(cd $(dirname $0) && pwd)
 cd $BASEPATH
 
+TMP_DIR=tmp
 LOG_DIR=log
 
 usage() {
@@ -84,9 +85,9 @@ check_config() {
 
 backup_database() {
   if [ -f "${BASEPATH}/config/${MYSQL_EXTRA_FILE}" ]; then
-    mysqldump --defaults-extra-file=$BASEPATH/config/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > tmp/$MYSQL_FILE
-    tar -rf tmp/${BACKUP_NAME}.tar --transform 's,^tmp/,database/,' tmp/$MYSQL_FILE
-    rm tmp/$MYSQL_FILE
+    mysqldump --defaults-extra-file=$BASEPATH/config/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/$MYSQL_FILE
+    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar --transform "s,^${TMP_DIR}/,database/," ${TMP_DIR}/$MYSQL_FILE
+    rm ${TMP_DIR}/$MYSQL_FILE
     echo "backup database ${MYSQL_FILE}"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/config/${MYSQL_EXTRA_FILE}"
@@ -103,7 +104,7 @@ backup_wordpress() {
   }
 
   if [ -d "$WP_ROOT_PATH" ]; then
-    tar -rf tmp/${BACKUP_NAME}.tar -C $WP_ROOT_PATH . $EXCLUDE_ARG
+    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C $WP_ROOT_PATH . $EXCLUDE_ARG
     echo "backup WordPress files on ${WP_ROOT_PATH}"
   else
     echo "Not Found WP_ROOT_PATH $WP_ROOT_PATH"
@@ -111,14 +112,14 @@ backup_wordpress() {
 }
 
 create_backup_file() {
-  if [ ! -f tmp/${BACKUP_NAME}.tar ]; then
+  if [ ! -f ${TMP_DIR}/${BACKUP_NAME}.tar ]; then
     echo "Not Found ${BACKUP_NAME}.tar"
     MESSAGE="[Error] [${CONFIG}] Not Found ${BACKUP_NAME}.tar"
     logging
     exit 1
   fi
 
-  gzip tmp/${BACKUP_NAME}.tar
+  gzip ${TMP_DIR}/${BACKUP_NAME}.tar
   echo "backup file ${BACKUP_NAME}.tar.gz"
 }
 
@@ -137,7 +138,7 @@ store_s3() {
     echo "set aws profile: ${AWS_PROFILE}"
   fi
 
-  aws s3 mv tmp/${BACKUP_NAME}.tar.gz $S3_URI
+  aws s3 mv ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
   echo "backup ${BACKUP_NAME}.tar.gz to S3"
 
   S3_FILES=`aws s3 ls $S3_URI | wc -l`
@@ -151,17 +152,17 @@ store_s3() {
 }
 
 create_tmp_dir() {
-  if [ -d tmp ]; then
-    rm -rf tmp
+  if [ -d $TMP_DIR ]; then
+    rm -rf $TMP_DIR
     echo "delete older tmp directory"
   fi
   echo "create tmp directory"
-  mkdir tmp
+  mkdir $TMP_DIR
 }
 
 delete_tmp_dir() {
-  if [ -d tmp ]; then
-    rm -rf tmp
+  if [ -d $TMP_DIR ]; then
+    rm -rf $TMP_DIR
     echo "delete tmp directory"
   fi
 }
@@ -169,7 +170,7 @@ delete_tmp_dir() {
 load_config $1
 check_config
 create_tmp_dir
-if [ -d tmp ]; then
+if [ -d $TMP_DIR ]; then
   backup_database
   backup_wordpress
   create_backup_file
