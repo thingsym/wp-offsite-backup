@@ -13,6 +13,8 @@ set -e
 BASEPATH=$(cd $(dirname $0) && pwd)
 cd $BASEPATH
 
+LOG_DIR=log
+
 usage() {
   echo "WP Offsite Backup Version 0.1.0"
   echo "usage: $0 [config|--help|--config]"
@@ -37,16 +39,16 @@ logging() {
     exit 1
   fi
 
-  if [ ! -f $LOG_FILE ]; then
-    touch $LOG_FILE
+  if [ ! -f ${LOG_DIR}/${LOG_FILE} ]; then
+    touch ${LOG_DIR}/${LOG_FILE}
   fi
 
-  echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> $LOG_FILE
+  echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> ${LOG_DIR}/${LOG_FILE}
 
-  LOG_LINES=`cat $LOG_FILE | wc -l`
-  if [ $MAX_LOG_LINES ] && [ 0 -lt $MAX_LOG_LINES ] && [ $LOG_LINES -gt $MAX_LOG_LINES ] ; then
-    cat $LOG_FILE | tail -n -$MAX_LOG_LINES > $LOG_FILE.new
-    mv $LOG_FILE.new $LOG_FILE
+  LOG_LINES=`cat ${LOG_DIR}/${LOG_FILE} | wc -l`
+  if [ $MAX_LOG_LINES ] && [ 0 -lt $MAX_LOG_LINES ] && [ $LOG_LINES -gt $MAX_LOG_LINES ]; then
+    cat ${LOG_DIR}/${LOG_FILE} | tail -n -$MAX_LOG_LINES > ${LOG_DIR}/${LOG_FILE}.new
+    mv ${LOG_DIR}/${LOG_FILE}.new ${LOG_DIR}/${LOG_FILE}
   fi
 }
 
