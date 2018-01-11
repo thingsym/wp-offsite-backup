@@ -67,13 +67,13 @@ cd wp-offsite-backup
 chmod +x wp-offsite-backup
 ```
 
-### 4. Edit configuration as default settings.
+### 4. Edit configuration as default settings.
 
 ```
 vi config/default
 ```
 
-### 5. Edit database configuration
+### 5. Edit database configuration
 
 ```
 vi config/.my.cnf
@@ -122,7 +122,7 @@ MAX_LOG_LINES=300
   * based on the backup file name e.g `wordpress-backup-2018-01-08_08-48-27`.tar.gz
 * `MAX_SAVED_FILES` maximum number of backup files to stored (default: `12`)
     * When the number of stored files exceeds the maximum stored number, backup files are deleted from the older update date and time.
-    * Set to `0` if saving unlimitedly
+    * Set to `0` if saving unlimitedly
 * `WP_ROOT_PATH` document root of WordPress (default: `/var/www/html`)
 * `DB_NAME` name of database (default: `wordpress`)
 * `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.my.cnf`)
@@ -152,11 +152,11 @@ EXCLUDE_EXTRA=()
 * `LOG_FILE` name of log file
 * `MAX_LOG_LINES` maximum number of log file lines (default: `300`)
   * When the number of log lines exceeds the maximum number of lines, log lines are deleted from the older lines.
-  * Set to `0` if logging unlimitedly
+  * Set to `0` if logging unlimitedly
 
 ### Database Configuration
 
-Database configuration file is invisible file as dot-file. e.g `.my.cnf` 
+Database configuration file is invisible file as dot-file. e.g `.my.cnf`
 
 ```
 [client]
@@ -167,11 +167,11 @@ host = localhost
 
 * `user` Database user name
 * `password` Database password
-* `host` Database host (defult: localhost)
+* `host` Database host (default: localhost)
 
 ### Preset Configuration
 
-The preset config is stored in `config`
+The preset config is stored in `config`
 
 * config-sample
 * db-only-backup-config
@@ -192,7 +192,7 @@ The preset config is stored in `config`
 * LICENSE
 * log (Stores log files)
 * readme.md
-* tmp (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
+* tmp (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
 * wp-offsite-backup (core shell script)
 
 ## Archive directory layout
@@ -222,7 +222,7 @@ vi config/customized-config
 Run backup using customized configuration `customized-config`.
 
 ```
-bash wp-offsite-backup customized-config
+bash wp-offsite-backup customized-config
 ```
 
 Scheduled automatic backup via Cron
