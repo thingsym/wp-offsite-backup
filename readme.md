@@ -150,7 +150,7 @@ EXCLUDE_EXTRA=()
 * `EXCLUDE_WP_CONTENT` list exclude files or directories in wp-content
 * `EXCLUDE_WP_CORE` list exclude files or directories in WordPress Core files
 * `LOG_FILE` name of log file
-* `MAX_LOG_LINES` maximum number of log file lines (default: `300`)
+* `MAX_LOG_LINES` maximum number of log lines (default: `300`)
   * When the number of log lines exceeds the maximum number of lines, log lines are deleted from the older lines.
   * Set to `0` if logging unlimitedly
 
@@ -171,7 +171,7 @@ host = localhost
 
 ### Preset Configuration
 
-The preset config is stored in `config`
+The preset config is stored in `config` directory
 
 * config-sample
 * db-only-backup-config
