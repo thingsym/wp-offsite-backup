@@ -168,6 +168,9 @@ host = localhost
 * `user` Database user name
 * `password` Database password
 * `host` Database host (default: localhost)
+* `port` Database port number (default: 3306)
+
+And supports the other options. See [mysql Options](https://dev.mysql.com/doc/refman/5.7/en/mysql-command-options.html)
 
 ### Preset Configuration
 
