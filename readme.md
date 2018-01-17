@@ -38,7 +38,7 @@ MAILTO=hoge@example.com
 ### Future plans
 
 * [Google Cloud Storage](https://cloud.google.com/storage/)
-* [Azure Storage](https://azure.microsoft.com/en-us/services/storage/)
+* [Microsoft Azure Storage](https://azure.microsoft.com/en-us/services/storage/)
 
 ## Required commands
 
