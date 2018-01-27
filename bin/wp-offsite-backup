@@ -13,8 +13,9 @@ set -e
 BASEPATH=$(cd $(dirname $0) && pwd)
 cd $BASEPATH
 
-TMP_DIR=tmp
-LOG_DIR=log
+TMP_DIR=../tmp
+LOG_DIR=../log
+CNF_DIR=../config
 
 usage() {
   echo "WP Offsite Backup Version 0.1.0"
@@ -23,8 +24,8 @@ usage() {
 }
 
 list_config() {
-  echo "list config: ${BASEPATH}/config"
-  ls -l ${BASEPATH}/config
+  echo "list config: ${BASEPATH}/${CNF_DIR}"
+  ls -l ${BASEPATH}/${CNF_DIR}
   exit 0
 }
 
@@ -62,14 +63,14 @@ load_config() {
     CONFIG=default
   fi
 
-  if [ -f "${BASEPATH}/config/${CONFIG}" ]; then
-    . ${BASEPATH}/config/${CONFIG}
-    echo "load CONFIG ${BASEPATH}/config/${CONFIG}"
+  if [ -f "${BASEPATH}/${CNF_DIR}/${CONFIG}" ]; then
+    . ${BASEPATH}/${CNF_DIR}/${CONFIG}
+    echo "load CONFIG ${BASEPATH}/${CNF_DIR}/${CONFIG}"
 
     echo "JOB_NAME: ${JOB_NAME}"
     echo "CONFIG: ${CONFIG}"
   else
-    echo "Not Found CONFIG ${BASEPATH}/config/${CONFIG}"
+    echo "Not Found CONFIG ${BASEPATH}/${CNF_DIR}/${CONFIG}"
     exit 1
   fi
 }
@@ -84,13 +85,13 @@ check_config() {
 }
 
 backup_database() {
-  if [ -f "${BASEPATH}/config/${MYSQL_EXTRA_FILE}" ]; then
-    mysqldump --defaults-extra-file=$BASEPATH/config/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/$MYSQL_FILE
+  if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
+    mysqldump --defaults-extra-file=$BASEPATH/${CNF_DIR}/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/$MYSQL_FILE
     tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar --transform "s,^${TMP_DIR}/,database/," ${TMP_DIR}/$MYSQL_FILE
     rm ${TMP_DIR}/$MYSQL_FILE
     echo "backup database ${MYSQL_FILE}"
   else
-    echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/config/${MYSQL_EXTRA_FILE}"
+    echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
   fi
 }
 
