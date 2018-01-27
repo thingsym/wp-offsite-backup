@@ -163,6 +163,7 @@ Database configuration file is invisible file as dot-file. e.g `.my.cnf`
 user = put_database_user
 password = put_database_password
 host = localhost
+port = 3306
 ```
 
 * `user` Database user name
@@ -184,6 +185,8 @@ The preset config is stored in `config` directory
 
 ## Script directory layout
 
+* bin
+  * wp-offsite-backup (core shell script)
 * config (Stores Configuration files)
   * .my.cnf (Database configuration file)
   * config-sample
@@ -196,7 +199,6 @@ The preset config is stored in `config` directory
 * log (Stores log files)
 * readme.md
 * tmp (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
-* wp-offsite-backup (core shell script)
 
 ## Archive directory layout
 
