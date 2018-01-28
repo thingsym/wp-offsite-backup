@@ -28,7 +28,7 @@ crontab -e
 ```
 MAILTO=hoge@example.com
 
-20 0 * * * bash /path/to/wp-offsite-backup/wp-offsite-backup
+20 0 * * * bash /path/to/wp-offsite-backup/bin/wp-offsite-backup
 ```
 
 ## Supported Storage Service
@@ -241,7 +241,7 @@ crontab -e
 ```
 MAILTO=hoge@example.com
 
-20 0 * * * WP_OFFSITE_BACKUP_CONFIG=customized-config bash /path/to/wp-offsite-backup/wp-offsite-backup
+20 0 * * * WP_OFFSITE_BACKUP_CONFIG=customized-config bash /path/to/wp-offsite-backup/bin/wp-offsite-backup
 ```
 
 ## Command Reference
@@ -290,7 +290,7 @@ Just log it when the backup is successful.
 ```
 MAILTO=hoge@example.com
 
-20 0 * * * bash /path/to/wp-offsite-backup/wp-offsite-backup >/dev/null
+20 0 * * * bash /path/to/wp-offsite-backup/bin/wp-offsite-backup >/dev/null
 ```
 
 ## Contribution
@@ -304,7 +304,7 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 ## Changelog
 
 * Version 0.1.0
-	* initial release
+  * initial release
 
 ## License
 
