@@ -154,17 +154,17 @@ store_s3() {
 }
 
 create_tmp_dir() {
-  if [ -d $TMP_DIR ]; then
-    rm -rf $TMP_DIR
+  if [ -d ${BASEPATH}/${TMP_DIR} ]; then
+    rm -r ${BASEPATH}/${TMP_DIR}
     echo "delete older tmp directory"
   fi
   echo "create tmp directory"
-  mkdir $TMP_DIR
+  mkdir ${BASEPATH}/${TMP_DIR}
 }
 
 delete_tmp_dir() {
-  if [ -d $TMP_DIR ]; then
-    rm -rf $TMP_DIR
+  if [ -d ${BASEPATH}/${TMP_DIR} ]; then
+    rm -r ${BASEPATH}/${TMP_DIR}
     echo "delete tmp directory"
   fi
 }
@@ -172,7 +172,7 @@ delete_tmp_dir() {
 load_config $1
 check_config
 create_tmp_dir
-if [ -d $TMP_DIR ]; then
+if [ -d ${BASEPATH}/$TMP_DIR ]; then
   backup_database
   backup_wordpress
   create_backup_file
