@@ -303,6 +303,11 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* Version 0.2.0
+  * add BASEPATH to the path
+  * create database dir
+  * store core shell script in bin directory
+  * add database port
 * Version 0.1.0
   * initial release
 
