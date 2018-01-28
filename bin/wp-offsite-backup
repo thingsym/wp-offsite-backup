@@ -86,9 +86,10 @@ check_config() {
 
 backup_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
-    mysqldump --defaults-extra-file=$BASEPATH/${CNF_DIR}/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/$MYSQL_FILE
-    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar --transform "s,^${TMP_DIR}/,database/," ${TMP_DIR}/$MYSQL_FILE
-    rm ${TMP_DIR}/$MYSQL_FILE
+    mkdir ${BASEPATH}/${TMP_DIR}/database
+    mysqldump --defaults-extra-file=$BASEPATH/${CNF_DIR}/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/database/$MYSQL_FILE
+    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/$MYSQL_FILE
+    rm -r ${BASEPATH}/${TMP_DIR}/database
     echo "backup database ${MYSQL_FILE}"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
