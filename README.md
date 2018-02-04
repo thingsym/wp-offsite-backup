@@ -299,20 +299,28 @@ MAILTO=hoge@example.com
 
 Small patches and bug reports can be submitted a issue tracker in Github. Forking on Github is another good way. You can send a pull request.
 
-* [wp-offsite-backup - GitHub](https://github.com/thingsym/wp-offsite-backup)
+1. Fork [WP Offsite Backup](https://github.com/thingsym/wp-offsite-backup) from GitHub repository
+2. Create a feature branch: git checkout -b my-new-feature
+3. Commit your changes: git commit -am 'Add some feature'
+4. Push to the branch: git push origin my-new-feature
+5. Create new Pull Request
 
 ## Changelog
 
 * Version 0.2.0
-  * add BASEPATH to the path
-  * create database dir
-  * store core shell script in bin directory
-  * add database port
+  * refactor: add BASEPATH to the path
+  * perf: create database dir
+  * perf: store core shell script in bin directory
+  * perf: add database port
 * Version 0.1.0
   * initial release
 
 ## License
 
-distributed under GPLv3.
+distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
+## Author
+
+[thingsym](https://github.com/thingsym)
 
 Copyright (c) 2018 thingsym
