@@ -64,7 +64,7 @@ cd wp-offsite-backup
 ### 3. Set permission
 
 ```
-chmod +x wp-offsite-backup
+chmod +x bin/wp-offsite-backup
 ```
 
 ### 4. Edit configuration as default settings.
@@ -82,7 +82,7 @@ vi config/.my.cnf
 ### 6. Testing backup
 
 ```
-bash wp-offsite-backup
+bash bin/wp-offsite-backup
 ```
 
 have fun!
@@ -197,7 +197,7 @@ The preset config is stored in `config` directory
   * wp-content-only-backup-config
 * LICENSE
 * log (Stores log files)
-* readme.md
+* README.md
 * tmp (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
 
 ## Archive directory layout
@@ -227,7 +227,7 @@ vi config/customized-config
 Run backup using customized configuration `customized-config`.
 
 ```
-bash wp-offsite-backup customized-config
+bash bin/wp-offsite-backup customized-config
 ```
 
 Scheduled automatic backup via Cron
