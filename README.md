@@ -282,6 +282,23 @@ wp-offsite-backup --config
 
 ## Tips
 
+### Adding a command path to $PATH
+
+The way to add a path to $PATH (the environment variable) is with the export command.
+
+```
+echo "export PATH=\$PATH:/path/to/wp-offsite-backup/bin" >> ~/.bash_profile
+source ~/.bash_profile
+```
+
+or
+
+The other way to make a symbolic link to /usr/bin.
+
+```
+sudo ln -s /path/to/wp-offsite-backup/bin/wp-offsite-backup /usr/bin
+```
+
 ### Alert mail via Cron
 
 Send log by email only on error as alert mail.
