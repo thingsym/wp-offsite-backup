@@ -54,7 +54,7 @@ logging() {
 
   echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> ${LOG_DIR}/${LOG_FILE}
 
-  LOG_LINES=`cat ${LOG_DIR}/${LOG_FILE} | wc -l`
+  local LOG_LINES=$(cat ${LOG_DIR}/${LOG_FILE} | wc -l)
   if [ $MAX_LOG_LINES ] && [ 0 -lt $MAX_LOG_LINES ] && [ $LOG_LINES -gt $MAX_LOG_LINES ]; then
     cat ${LOG_DIR}/${LOG_FILE} | tail -n -$MAX_LOG_LINES > ${LOG_DIR}/${LOG_FILE}.new
     mv ${LOG_DIR}/${LOG_FILE}.new ${LOG_DIR}/${LOG_FILE}
@@ -104,6 +104,7 @@ backup_database() {
 }
 
 backup_wordpress() {
+  local EXCLUDE=()
   EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_EXTRA[@]}")
   EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_WP_CONTENT[@]}")
   EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_WP_CORE[@]}")
@@ -150,7 +151,7 @@ store_s3() {
   aws s3 mv ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
   echo "backup ${BACKUP_NAME}.tar.gz to S3"
 
-  S3_FILES=`aws s3 ls $S3_URI | wc -l`
+  local S3_FILES=$(aws s3 ls $S3_URI | wc -l)
   echo "stored files to S3: ${S3_FILES} files"
 
   if [ $MAX_SAVED_FILES ] && [ 0 -lt $MAX_SAVED_FILES ] && [ $S3_FILES -gt $MAX_SAVED_FILES ] ; then
