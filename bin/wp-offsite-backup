@@ -45,7 +45,7 @@ elif [ "${1:-}" = "--config" ]; then
 fi
 
 logging() {
-  if [ ! "$LOG_FILE" ]; then
+  if [ -z "$LOG_FILE" ]; then
     echo "Not Found LOG file"
     exit 1
   fi
@@ -171,7 +171,7 @@ store_s3() {
     return;
   fi
 
-  if [ ! "$S3_URI" ]; then
+  if [ -z "$S3_URI" ]; then
     return;
   fi
 
