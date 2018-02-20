@@ -26,6 +26,8 @@ CNF_DIR=../config
 usage() {
   echo "WP Offsite Backup Version 0.2.1"
   echo "usage: $0 [config|--help|--config]"
+  echo "config path: ${BASEPATH}/${CNF_DIR}"
+  echo "log path: ${BASEPATH}/${LOG_DIR}"
   exit 0
 }
 
