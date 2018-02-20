@@ -176,6 +176,7 @@ delete_tmp_dir() {
     echo "delete tmp directory"
   fi
 }
+trap delete_tmp_dir EXIT
 
 load_config ${1:-}
 check_config
@@ -189,7 +190,6 @@ else
   echo "Not Found tmp directory"
   exit 1
 fi
-delete_tmp_dir
 
 MESSAGE="[Success] [${CONFIG}] WordPress Backup complete!"
 logging
