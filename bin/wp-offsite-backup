@@ -8,7 +8,7 @@
 # distributed under GPLv3.
 # Copyright (c) 2018 thingsym
 
-set -e
+set -euo pipefail
 
 if [ $(readlink $0) ]; then
   BASEPATH=$(dirname $(readlink $0))
@@ -35,9 +35,9 @@ list_config() {
   exit 0
 }
 
-if [ "$1" = "--help" ]; then
+if [ "${1:-}" = "--help" ]; then
   usage
-elif [ "$1" = "--config" ]; then
+elif [ "${1:-}" = "--config" ]; then
   list_config
 fi
 
@@ -61,9 +61,9 @@ logging() {
 }
 
 load_config() {
-  if [ $1 ]; then
+  if [ "${1:-}" ]; then
     CONFIG=$1
-  elif [ $WP_OFFSITE_BACKUP_CONFIG ]; then
+  elif [ "${WP_OFFSITE_BACKUP_CONFIG:-}" ]; then
     CONFIG=$WP_OFFSITE_BACKUP_CONFIG
   else
     CONFIG=default
@@ -175,7 +175,7 @@ delete_tmp_dir() {
   fi
 }
 
-load_config $1
+load_config ${1:-}
 check_config
 create_tmp_dir
 if [ -d ${BASEPATH}/$TMP_DIR ]; then
