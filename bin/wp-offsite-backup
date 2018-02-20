@@ -22,6 +22,8 @@ cd $BASEPATH
 LOG_DIR=../log
 CNF_DIR=../config
 
+declare -A MESSAGE
+
 usage() {
   echo "WP Offsite Backup Version 0.2.1"
   echo "usage: $0 [config|--help|--config]"
@@ -52,7 +54,21 @@ logging() {
     touch ${LOG_DIR}/${LOG_FILE}
   fi
 
-  echo "["`date '+%Y-%m-%d %H:%M:%S'`"] $MESSAGE" >> ${LOG_DIR}/${LOG_FILE}
+  local formatted_massage=""
+
+  if [ "${LOG_FORMAT:-}" = "ltsv" ]; then
+    formatted_massage+="time:"$(date '+%Y-%m-%d %H:%M:%S')""
+    formatted_massage+="\tstatus:${MESSAGE[status]}"
+    formatted_massage+="\tconfig:${MESSAGE[config]}"
+    formatted_massage+="\tmassage:${MESSAGE[massage]}"
+  else
+    formatted_massage+="["$(date '+%Y-%m-%d %H:%M:%S')"]"
+    formatted_massage+=" [${MESSAGE[status]}]"
+    formatted_massage+=" [${MESSAGE[config]}]"
+    formatted_massage+=" ${MESSAGE[massage]}"
+  fi
+
+  echo -e "${formatted_massage}" >> ${LOG_DIR}/${LOG_FILE}
 
   local LOG_LINES=$(cat ${LOG_DIR}/${LOG_FILE} | wc -l)
   if [ "$MAX_LOG_LINES" ] && [ 0 -lt "$MAX_LOG_LINES" ] && [ "$LOG_LINES" -gt "$MAX_LOG_LINES" ]; then
@@ -85,7 +101,11 @@ load_config() {
 check_config() {
   if [ ! -d "${WP_ROOT_PATH}" ]; then
     echo "Not Found WP_ROOT_PATH $WP_ROOT_PATH"
-    MESSAGE="[Error] [${CONFIG}] Not Found WP_ROOT_PATH $WP_ROOT_PATH"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not Found WP_ROOT_PATH $WP_ROOT_PATH"
+    )
     logging
     exit 1
   fi
@@ -124,7 +144,11 @@ backup_wordpress() {
 create_backup_file() {
   if [ ! -f "${TMP_DIR}/${BACKUP_NAME}.tar" ]; then
     echo "Not Found ${BACKUP_NAME}.tar"
-    MESSAGE="[Error] [${CONFIG}] Not Found ${BACKUP_NAME}.tar"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not Found ${BACKUP_NAME}.tar"
+    )
     logging
     exit 1
   fi
@@ -188,7 +212,12 @@ else
   exit 1
 fi
 
-MESSAGE="[Success] [${CONFIG}] WordPress Backup complete!"
+MESSAGE=(
+  ["status"]="Success"
+  ["config"]="${CONFIG}"
+  ["massage"]="WordPress Backup complete!"
+)
+
 logging
 
 exit 0

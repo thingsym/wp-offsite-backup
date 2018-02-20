@@ -45,4 +45,5 @@ EXCLUDE_WP_CORE=(
 )
 
 LOG_FILE=history.log
+LOG_FORMAT=common
 MAX_LOG_LINES=300
