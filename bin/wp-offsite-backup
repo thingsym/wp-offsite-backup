@@ -125,10 +125,18 @@ backup_database() {
 
 backup_wordpress() {
   local EXCLUDE=()
-  EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_EXTRA[@]}")
-  EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_WP_CONTENT[@]}")
-  EXCLUDE=("${EXCLUDE[@]}" "${EXCLUDE_WP_CORE[@]}")
 
+  if [ 0 -lt "${#EXCLUDE_EXTRA[@]}" ]; then
+    EXCLUDE+=("${EXCLUDE_EXTRA[@]}")
+  fi
+  if [ 0 -lt "${#EXCLUDE_WP_CONTENT[@]}" ]; then
+    EXCLUDE+=("${EXCLUDE_WP_CONTENT[@]}")
+  fi
+  if [ 0 -lt "${#EXCLUDE_WP_CORE[@]}" ]; then
+    EXCLUDE+=("${EXCLUDE_WP_CORE[@]}")
+  fi
+
+  local EXCLUDE_ARG=""
   for ((i = 0; i < ${#EXCLUDE[@]}; i++)); do
     EXCLUDE_ARG+=" --exclude ${EXCLUDE[i]}"
   done
@@ -192,7 +200,7 @@ create_tmp_dir() {
 }
 
 delete_tmp_dir() {
-  if [ -d "${TMP_DIR}" ]; then
+  if [ -d "${TMP_DIR:-}" ]; then
     rm -r ${TMP_DIR}
     echo "delete tmp directory"
   fi
