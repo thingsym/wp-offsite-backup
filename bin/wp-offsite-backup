@@ -19,7 +19,6 @@ fi
 
 cd $BASEPATH
 
-TMP_DIR=../tmp
 LOG_DIR=../log
 CNF_DIR=../config
 
@@ -94,10 +93,10 @@ check_config() {
 
 backup_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
-    mkdir ${BASEPATH}/${TMP_DIR}/database
     mysqldump --defaults-extra-file=$BASEPATH/${CNF_DIR}/$MYSQL_EXTRA_FILE --single-transaction --add-drop-table $DB_NAME > ${TMP_DIR}/database/$MYSQL_FILE
     tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/$MYSQL_FILE
-    rm -r ${BASEPATH}/${TMP_DIR}/database
+    mkdir ${TMP_DIR}/database
+    rm -r ${TMP_DIR}/database
     echo "backup database ${MYSQL_FILE}"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
@@ -162,17 +161,14 @@ store_s3() {
 }
 
 create_tmp_dir() {
-  if [ -d ${BASEPATH}/${TMP_DIR} ]; then
-    rm -r ${BASEPATH}/${TMP_DIR}
-    echo "delete older tmp directory"
-  fi
+  TMP_DIR=$(mktemp -p ${BASEPATH}/.. -d tmp.XXXXXXXXXX)
   echo "create tmp directory"
-  mkdir ${BASEPATH}/${TMP_DIR}
+  echo "TMP DIR: ${TMP_DIR}"
 }
 
 delete_tmp_dir() {
-  if [ -d ${BASEPATH}/${TMP_DIR} ]; then
-    rm -r ${BASEPATH}/${TMP_DIR}
+  if [ -d "${TMP_DIR}" ]; then
+    rm -r ${TMP_DIR}
     echo "delete tmp directory"
   fi
 }
@@ -181,7 +177,7 @@ trap delete_tmp_dir EXIT
 load_config ${1:-}
 check_config
 create_tmp_dir
-if [ -d ${BASEPATH}/$TMP_DIR ]; then
+if [ -d "${TMP_DIR}" ]; then
   backup_database
   backup_wordpress
   create_backup_file
