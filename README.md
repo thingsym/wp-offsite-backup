@@ -43,6 +43,7 @@ MAILTO=hoge@example.com
 ## Required commands
 
 * mysqldump
+* mktmp
 * tar
 * gzip
 * aws ([AWS Command Line Interface](https://aws.amazon.com/cli/))
@@ -114,6 +115,7 @@ EXCLUDE_WP_CONTENT=()
 EXCLUDE_WP_CORE=()
 
 LOG_FILE=history.log
+LOG_FORMAT=common
 MAX_LOG_LINES=300
 ```
 
@@ -150,6 +152,7 @@ EXCLUDE_EXTRA=()
 * `EXCLUDE_WP_CONTENT` list exclude files or directories in wp-content
 * `EXCLUDE_WP_CORE` list exclude files or directories in WordPress Core files
 * `LOG_FILE` name of log file
+* `LOG_FORMAT` type of log format (default: `common` / value: `common` | `ltsv`)
 * `MAX_LOG_LINES` maximum number of log lines (default: `300`)
   * When the number of log lines exceeds the maximum number of lines, log lines are deleted from the older lines.
   * Set to `0` if logging unlimitedly
@@ -198,7 +201,7 @@ The preset config is stored in `config` directory
 * LICENSE
 * log (Stores log files)
 * README.md
-* tmp (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
+* tmp.XXXXXXXXXX (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
 
 ## Archive directory layout
 
@@ -279,6 +282,36 @@ List configuration.
 ```
 wp-offsite-backup --config
 ```
+
+## Log Format
+
+There are two log formats, `common` and `ltsv`. 
+
+The format of the `common` log format is as follows.
+
+```
+[{%Y-%m-%d %H:%M:%S}] [status] [config] massage
+```
+
+Sample log format is as follows.
+
+```
+[2018-02-20 12:49:34] [Success] [default] WordPress Backup complete!
+```
+
+The format of the `ltsv` log format is as follows.
+
+```
+time:%Y-%m-%d %H:%M:%S\tstatus:status\tconfig:config"\tmassage:massage
+```
+
+Sample log format is as follows.
+
+```
+time:2018-02-20 11:55:24	status:Success	config:default	massage:WordPress Backup complete!
+```
+
+Reference: [Labeled Tab-separated Values](http://ltsv.org/)
 
 ## Tips
 
