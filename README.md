@@ -357,6 +357,14 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* Version 0.2.2
+  * perf: add log format LTSV
+  * refactor: fix format
+  * refactor: change to local value
+  * refactor: change to create tmp directory using mktemp command
+  * refactor: change to delete tmp directory using trap command
+  * perf: add command path info
+  * perf: add set command option
 * Version 0.2.1
   * perf: run command via symbolic link
 * Version 0.2.0
