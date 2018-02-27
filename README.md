@@ -43,7 +43,7 @@ MAILTO=hoge@example.com
 ## Required commands
 
 * mysqldump
-* mktmp
+* mktemp
 * tar
 * gzip
 * aws ([AWS Command Line Interface](https://aws.amazon.com/cli/))
