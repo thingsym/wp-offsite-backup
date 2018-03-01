@@ -377,7 +377,7 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## License
 
-distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
+distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Author
 
