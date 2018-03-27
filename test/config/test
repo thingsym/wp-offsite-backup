@@ -1,7 +1,6 @@
 JOB_NAME="test.... WordPress backup"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
 MAX_SAVED_FILES=12
-PREFIX=
 
 WP_ROOT_PATH=/tmp/wordpress/
 DB_NAME=wordpress_test
