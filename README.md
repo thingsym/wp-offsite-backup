@@ -1,5 +1,7 @@
 # WP Offsite Backup
 
+[![Build Status](https://travis-ci.org/thingsym/wp-offsite-backup.svg?branch=master)](https://travis-ci.org/thingsym/wp-offsite-backup)
+
 WP Offsite Backup is a Shell script for backup WordPress to offsite.
 
 ## Features
