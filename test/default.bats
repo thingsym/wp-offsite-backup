@@ -14,7 +14,7 @@ teardown() {
   fi
 }
 
-@test "status code 0" {
+@test "default config - returns 0 exit code" {
   run ./bin/wp-offsite-backup
 
   assert_success
@@ -29,17 +29,18 @@ teardown() {
   assert_lines_equal "Not Found aws commad" 8
   assert_lines_equal "delete tmp directory" 9
 
-  assert_match <<EXPECTED
+  assert_match "$(cat <<EXPECTED
 JOB_NAME: test.... WordPress backup
 CONFIG: default
 create tmp directory
 EXPECTED
+)"
 
 }
 
-@test "exist default config" {
+@test "exists default config" {
   run ./bin/wp-offsite-backup --config
 
-  assert_match "default"
+  assert_lines_match "default"
 
 }

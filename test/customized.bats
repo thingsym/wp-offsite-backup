@@ -15,7 +15,7 @@ teardown() {
   fi
 }
 
-@test "customized config - status code 0" {
+@test "customized config - returns 0 exit code" {
   run ./bin/wp-offsite-backup test
 
   assert_success
@@ -32,7 +32,7 @@ teardown() {
 
 }
 
-@test "not exist customized config - status code 1" {
+@test "not exists customized config - returns 1 exit code" {
   run ./bin/wp-offsite-backup test1
 
   assert_failure
@@ -42,9 +42,9 @@ teardown() {
 
 }
 
-@test "exist test config" {
+@test "exists test config" {
   run ./bin/wp-offsite-backup --config
 
-  assert_match "test"
+  assert_lines_match "test"
 
 }

@@ -28,7 +28,7 @@ EOS
 
   run ./bin/wp-offsite-backup
 
-  assert_match "[Success] [default]" "$(cat ./log/test.log)"
+  assert_match "\[Success\] \[default\]" "$(cat ./log/test.log)"
 
 }
 
@@ -48,7 +48,7 @@ EOS
 EOS
 
   run ./bin/wp-offsite-backup
-  lines=$(cat ./log/test.log | wc -l)
+  lines="$(cat ./log/test.log | wc -l)"
 
   assert_equal "10" "$lines"
 
