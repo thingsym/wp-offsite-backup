@@ -14,7 +14,7 @@ teardown() {
   fi
 }
 
-@test "default config - returns 0 exit code" {
+@test "default config - return 0 exit code" {
   run ./bin/wp-offsite-backup
 
   assert_success
