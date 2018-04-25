@@ -78,12 +78,12 @@ logging() {
 }
 
 load_config() {
+  CONFIG=default
+
   if [ "${1:-}" ]; then
     CONFIG=$1
   elif [ "${WP_OFFSITE_BACKUP_CONFIG:-}" ]; then
     CONFIG=$WP_OFFSITE_BACKUP_CONFIG
-  else
-    CONFIG=default
   fi
 
   if [ -f "${BASEPATH}/${CNF_DIR}/${CONFIG}" ]; then
