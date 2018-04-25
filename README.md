@@ -359,6 +359,10 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* Version 0.2.3
+  * refactor: fix initialized CONFIG
+  * test: add tests
+  * test: add .travis.yml
 * Version 0.2.2
   * perf: add log format LTSV
   * refactor: fix format
