@@ -51,11 +51,16 @@ list_config() {
   exit 0
 }
 
-if [ "${1:-}" = "--help" ]; then
-  usage
-elif [ "${1:-}" = "--config" ]; then
-  list_config
-fi
+case "${1:-}" in
+  --help)
+    usage
+    break
+  ;;
+  --config)
+    list_config
+    break
+  ;;
+esac
 
 logging() {
   if [ -z "$LOG_FILE" ]; then
