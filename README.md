@@ -267,16 +267,10 @@ wp-offsite-backup <parameter>
 
 Run backup using customized settings.
 
-**Note**: Pass configuration name to parameter [config]
+**Note**: Pass configuration name to parameter <config>
 
 ```
-wp-offsite-backup [config]
-```
-
-Display command info and usage.
-
-```
-wp-offsite-backup --help
+wp-offsite-backup <config>
 ```
 
 List configuration.
@@ -285,17 +279,23 @@ List configuration.
 wp-offsite-backup --config
 ```
 
+Display command info and usage.
+
+```
+wp-offsite-backup --help
+```
+
 ## Log Format
 
 There are two log formats, `common` and `ltsv`. 
 
-The format of the `common` log format is as follows.
+The format of the `common` log is as follows.
 
 ```
 [{%Y-%m-%d %H:%M:%S}] [status] [config] massage
 ```
 
-Sample log format is as follows.
+Example log format is as follows.
 
 ```
 [2018-02-20 12:49:34] [Success] [default] WordPress Backup complete!
@@ -307,7 +307,7 @@ The format of the `ltsv` log format is as follows.
 time:%Y-%m-%d %H:%M:%S\tstatus:status\tconfig:config"\tmassage:massage
 ```
 
-Sample log format is as follows.
+Example log format is as follows.
 
 ```
 time:2018-02-20 11:55:24	status:Success	config:default	massage:WordPress Backup complete!
@@ -349,7 +349,7 @@ MAILTO=hoge@example.com
 
 ### Patches and Bug Fixes
 
-Small patches and bug reports can be submitted a issue tracker in Github. Forking on Github is another good way. You can send a pull request.
+Small patches and bug reports can be submitted a issue tracker in GitHub. Forking on GitHub is another good way. You can send a pull request.
 
 1. Fork [WP Offsite Backup](https://github.com/thingsym/wp-offsite-backup) from GitHub repository
 2. Create a feature branch: git checkout -b my-new-feature
