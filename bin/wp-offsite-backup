@@ -26,9 +26,22 @@ declare -A MESSAGE
 
 usage() {
   echo "WP Offsite Backup Version 0.2.3"
-  echo "usage: $0 [config|--help|--config]"
+  echo "usage: $(basename ${0}) [<config>|--config|--help]"
   echo "config path: ${BASEPATH}/${CNF_DIR}"
   echo "log path: ${BASEPATH}/${LOG_DIR}"
+
+  cat <<EOF
+WP Offsite Backup is a tool for backup WordPress to offsite.
+
+Usage:
+    $(basename ${0}) [<options>]
+
+Options:
+    <config>      configuration name, default name 'default'
+    --config      print config list
+    --help        print usage
+EOF
+
   exit 0
 }
 
