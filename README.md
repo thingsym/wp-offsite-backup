@@ -359,6 +359,10 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.3.0
+  * perf: test backup file for integrity
+  * perf: change to case statement where command option is passed
+  * perf: fix usage
 * Version 0.2.3
   * refactor: fix initialized CONFIG
   * test: add tests

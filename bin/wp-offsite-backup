@@ -3,7 +3,7 @@
 # WP Offsite Backup
 # This script is a Shell script for backup WordPress to offsite.
 # URL: https://github.com/thingsym/wp-offsite-backup
-# Version: 0.2.3
+# Version: 0.3.0
 # Author: thingsym
 # distributed under GPLv3.
 # Copyright (c) 2018 thingsym
