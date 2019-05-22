@@ -183,6 +183,21 @@ create_backup_file() {
   echo "backup file ${BACKUP_NAME}.tar.gz"
 }
 
+test_backup_file() {
+  if gzip -t ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
+    echo "test file ${BACKUP_NAME}.tar.gz for integrity"
+  else
+    echo "fail test... maybe ${BACKUP_NAME}.tar.gz file is corrupt"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Fail test ${BACKUP_NAME}.tar.gz"
+    )
+    logging
+    exit 1
+  fi
+}
+
 store_s3() {
   if ! type aws > /dev/null 2>&1; then
     echo "Not Found aws commad"
@@ -232,6 +247,7 @@ if [ -d "${TMP_DIR}" ]; then
   backup_database
   backup_wordpress
   create_backup_file
+  test_backup_file
   store_s3
 else
   echo "Not Found tmp directory"

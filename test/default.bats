@@ -26,8 +26,9 @@ teardown() {
   assert_lines_equal "backup database wordpress.sql" 5
   assert_lines_match "backup WordPress files on" 6
   assert_lines_match "backup file wordpress-backup-" 7
-  assert_lines_equal "Not Found aws commad" 8
-  assert_lines_equal "delete tmp directory" 9
+  assert_lines_match "test file wordpress-backup-" 8
+  assert_lines_equal "Not Found aws commad" 9
+  assert_lines_equal "delete tmp directory" 10
 
   assert_match "$(cat <<EXPECTED
 JOB_NAME: test.... WordPress backup
