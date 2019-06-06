@@ -133,7 +133,7 @@ backup_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
     mkdir ${TMP_DIR}/database
     mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --single-transaction --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
-    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/${MYSQL_FILE}
+    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/${MYSQL_FILE} || [[ $? == 1 ]]
     rm -r ${TMP_DIR}/database
     echo "backup database ${MYSQL_FILE}"
   else
@@ -160,7 +160,7 @@ backup_wordpress() {
   done
 
   if [ -d "${WP_ROOT_PATH}" ]; then
-    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG}
+    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG} || [[ $? == 1 ]]
     echo "backup WordPress files on ${WP_ROOT_PATH}"
   else
     echo "Not Found WP_ROOT_PATH ${WP_ROOT_PATH}"
