@@ -1,0 +1,5 @@
+[client]
+user = put_database_user
+password = put_database_password
+host = localhost
+port = 3306
