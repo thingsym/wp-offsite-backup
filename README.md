@@ -359,6 +359,11 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.3.1
+  * test: fix .travis.yml
+  * fix: fix exit status 1 with tar
+  * perf: add .sample.my.cnf
+  * test: update install-wp-tests.sh
 * Version 0.3.0
   * perf: test backup file for integrity
   * perf: change to case statement where command option is passed
