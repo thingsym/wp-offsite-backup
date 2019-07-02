@@ -8,8 +8,8 @@ DB_NAME=
 MYSQL_EXTRA_FILE=
 MYSQL_FILE=
 
-S3_URI=
 AWS_PROFILE=
+S3_URI=
 S3_STORAGE_CLASS=STANDARD_IA
 
 EXCLUDE_EXTRA=(
@@ -21,6 +21,7 @@ EXCLUDE_WP_CONTENT=(
   "./wp-content/uploads/backwpup-*-backups"
   "./wp-content/uploads/backwpup-*-logs"
   "./wp-content/uploads/backwpup-*-temp"
+  "./wp-content/ai1wm-backups"
   "./wp-content/db.php"
 )
 
