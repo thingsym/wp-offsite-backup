@@ -1,5 +1,6 @@
 JOB_NAME="WordPress backup"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
+COMPRESS=gzip
 MAX_SAVED_FILES=12
 
 WP_ROOT_PATH=/var/www/html

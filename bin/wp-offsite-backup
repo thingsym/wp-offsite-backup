@@ -173,6 +173,42 @@ archive_file() {
   fi
 }
 
+compress_gzip() {
+  if type gzip > /dev/null 2>&1; then
+    echo "compress file ... (gzip)"
+    gzip ${TMP_DIR}/${BACKUP_NAME}.tar
+    FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar.gz | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    echo "compress file to ${BACKUP_NAME}.tar.gz (size: ${FILE_SIZE})"
+  else
+    echo "Not Found compress command"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not found compress command"
+    )
+    logging
+    exit 1
+  fi
+}
+
+compress_zstd() {
+  if type zstd > /dev/null 2>&1; then
+    echo "compress file ... (zstd)"
+    zstd -6 --rm --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar -o ${TMP_DIR}/${BACKUP_NAME}.tar.zst
+    FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar.zst | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    echo "compress file to ${BACKUP_NAME}.tar.zst (size: ${FILE_SIZE})"
+  else
+    echo "Not Found compress command"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not found compress command"
+    )
+    logging
+    exit 1
+  fi
+}
+
 compress_file() {
   if [ ! -f "${TMP_DIR}/${BACKUP_NAME}.tar" ]; then
     echo "Not Found ${BACKUP_NAME}.tar"
@@ -185,19 +221,57 @@ compress_file() {
     exit 1
   fi
 
-  gzip ${TMP_DIR}/${BACKUP_NAME}.tar
-  echo "backup file ${BACKUP_NAME}.tar.gz"
-}
-
-test_compress_file() {
-  if gzip -t ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
-    echo "test file ${BACKUP_NAME}.tar.gz for integrity"
+  if [ "${COMPRESS:-}" = "zstd" ]; then
+    compress_zstd
+  elif [ "${COMPRESS:-}" = "gzip" ]; then
+    compress_gzip
   else
-    echo "fail test... maybe ${BACKUP_NAME}.tar.gz file is corrupt"
+    echo "Not Found COMPRESS type"
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Fail test ${BACKUP_NAME}.tar.gz"
+      ["massage"]="Not found COMPRESS type"
+    )
+    logging
+    exit 1
+  fi
+
+}
+
+test_compress_file() {
+  echo "test compressed file integrity ..."
+  if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
+    if zstd --test --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
+      echo "success test ${BACKUP_NAME}.tar.zst for integrity"
+    else
+      echo "fail test ${BACKUP_NAME}.tar.zst is corrupt"
+      MESSAGE=(
+        ["status"]="Error"
+        ["config"]="${CONFIG}"
+        ["massage"]="Fail test ${BACKUP_NAME}.tar.zst"
+      )
+      logging
+      exit 1
+    fi
+  elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
+    if gzip --test ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
+      echo "success test ${BACKUP_NAME}.tar.gz for integrity"
+    else
+      echo "fail test ${BACKUP_NAME}.tar.gz is corrupt"
+      MESSAGE=(
+        ["status"]="Error"
+        ["config"]="${CONFIG}"
+        ["massage"]="Fail test ${BACKUP_NAME}.tar.gz"
+      )
+      logging
+      exit 1
+    fi
+  else
+    echo "Not Found compressed file ${BACKUP_NAME}.tar.(zst|gz) (${COMPRESS})"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not Found compressed file ${BACKUP_NAME}.tar.(zst|gz) (${COMPRESS})"
     )
     logging
     exit 1
@@ -219,8 +293,23 @@ store_s3() {
     echo "set aws profile: ${AWS_PROFILE}"
   fi
 
-  aws s3 mv ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
-  echo "backup ${BACKUP_NAME}.tar.gz to S3"
+  echo "backup to S3 ..."
+  if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
+    aws s3 mv --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
+    echo "backup ${BACKUP_NAME}.tar.zst to S3"
+  elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
+    aws s3 mv --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
+    echo "backup ${BACKUP_NAME}.tar.gz to S3"
+  else
+    echo "Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
+    MESSAGE=(
+      ["status"]="Error"
+      ["config"]="${CONFIG}"
+      ["massage"]="Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
+    )
+    logging
+    exit 1
+  fi
 
   local S3_FILES=$(aws s3 ls $S3_URI | wc -l)
   echo "stored files to S3: ${S3_FILES} files"
