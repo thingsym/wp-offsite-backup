@@ -1,5 +1,6 @@
 JOB_NAME="test.... WordPress backup"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
+COMPRESS=gzip
 MAX_SAVED_FILES=12
 
 WP_ROOT_PATH=/tmp/wordpress/
@@ -7,8 +8,9 @@ DB_NAME=wordpress_test
 MYSQL_EXTRA_FILE=.test.my.cnf
 MYSQL_FILE=wordpress.sql
 
-S3_URI=
 AWS_PROFILE=
+S3_URI=
+S3_STORAGE_CLASS=STANDARD_IA
 
 EXCLUDE_EXTRA=(
   ".git"

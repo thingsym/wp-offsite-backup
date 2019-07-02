@@ -1,0 +1,26 @@
+JOB_NAME="test.... WordPress backup"
+BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
+COMPRESS=zstd
+MAX_SAVED_FILES=12
+
+WP_ROOT_PATH=/tmp/wordpress/
+DB_NAME=wordpress_test
+MYSQL_EXTRA_FILE=.test.my.cnf
+MYSQL_FILE=wordpress.sql
+
+AWS_PROFILE=
+S3_URI=
+S3_STORAGE_CLASS=STANDARD_IA
+
+EXCLUDE_EXTRA=(
+  ".git"
+  ".DS_Store"
+)
+
+EXCLUDE_WP_CONTENT=()
+
+EXCLUDE_WP_CORE=()
+
+LOG_FILE=test.log
+LOG_FORMAT=common
+MAX_LOG_LINES=10

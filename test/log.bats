@@ -4,7 +4,7 @@ load bats-assertion/bats-assertion
 
 setup() {
   cp ./test/config/my.cnf ./config/.test.my.cnf
-  cp ./test/config/test ./config/default
+  cp ./test/config/test-gzip ./config/default
 }
 
 teardown() {
