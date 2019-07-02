@@ -129,7 +129,7 @@ check_config() {
   fi
 }
 
-backup_database() {
+dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
     mkdir ${TMP_DIR}/database
     mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --single-transaction --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
@@ -141,7 +141,7 @@ backup_database() {
   fi
 }
 
-backup_wordpress() {
+archive_file() {
   local EXCLUDE=()
 
   if [ 0 -lt "${#EXCLUDE_EXTRA[@]}" ]; then
@@ -167,7 +167,7 @@ backup_wordpress() {
   fi
 }
 
-create_backup_file() {
+compress_file() {
   if [ ! -f "${TMP_DIR}/${BACKUP_NAME}.tar" ]; then
     echo "Not Found ${BACKUP_NAME}.tar"
     MESSAGE=(
@@ -183,7 +183,7 @@ create_backup_file() {
   echo "backup file ${BACKUP_NAME}.tar.gz"
 }
 
-test_backup_file() {
+test_compress_file() {
   if gzip -t ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
     echo "test file ${BACKUP_NAME}.tar.gz for integrity"
   else
@@ -244,10 +244,10 @@ load_config ${1:-}
 check_config
 create_tmp_dir
 if [ -d "${TMP_DIR}" ]; then
-  backup_database
-  backup_wordpress
-  create_backup_file
-  test_backup_file
+  dump_database
+  archive_file
+  compress_file
+  test_compress_file
   store_s3
 else
   echo "Not Found tmp directory"
