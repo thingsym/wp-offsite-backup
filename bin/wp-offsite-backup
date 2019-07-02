@@ -295,10 +295,10 @@ store_s3() {
 
   echo "backup to S3 ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
-    aws s3 mv --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
+    aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
     echo "backup ${BACKUP_NAME}.tar.zst to S3"
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
-    aws s3 mv --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
+    aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
     echo "backup ${BACKUP_NAME}.tar.gz to S3"
   else
     echo "Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
