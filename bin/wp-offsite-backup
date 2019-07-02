@@ -132,7 +132,7 @@ check_config() {
 dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
     mkdir ${TMP_DIR}/database
-    mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --single-transaction --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
+    mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
     tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/${MYSQL_FILE} || [[ $? == 1 ]]
     rm -r ${TMP_DIR}/database
     echo "backup database ${MYSQL_FILE}"
