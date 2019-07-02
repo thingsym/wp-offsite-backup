@@ -106,7 +106,7 @@ load_config() {
 
   if [ -f "${BASEPATH}/${CNF_DIR}/${CONFIG}" ]; then
     . ${BASEPATH}/${CNF_DIR}/${CONFIG}
-    echo "load CONFIG ${BASEPATH}/${CNF_DIR}/${CONFIG}"
+    echo "load CONFIG: ${BASEPATH}/${CNF_DIR}/${CONFIG}"
 
     echo "JOB_NAME: ${JOB_NAME}"
     echo "CONFIG: ${CONFIG}"
@@ -131,11 +131,14 @@ check_config() {
 
 dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
+    echo "dump database ..."
     mkdir ${TMP_DIR}/database
     mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
+    FILE_SIZE=$(du -sh ${TMP_DIR}/database/${MYSQL_FILE} | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    echo "dump database to ${MYSQL_FILE} (size: ${FILE_SIZE})"
     tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/${MYSQL_FILE} || [[ $? == 1 ]]
     rm -r ${TMP_DIR}/database
-    echo "backup database ${MYSQL_FILE}"
+    echo "archive database to ${TMP_DIR}/${BACKUP_NAME}.tar"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
   fi
@@ -160,8 +163,11 @@ archive_file() {
   done
 
   if [ -d "${WP_ROOT_PATH}" ]; then
+    FILE_SIZE=$(du -sh ${WP_ROOT_PATH} | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    echo "archive ${WP_ROOT_PATH} ... (estimated size: ${FILE_SIZE})"
     tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG} || [[ $? == 1 ]]
-    echo "backup WordPress files on ${WP_ROOT_PATH}"
+    FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    echo "archive WordPress files to ${TMP_DIR}/${BACKUP_NAME}.tar (size: ${FILE_SIZE})"
   else
     echo "Not Found WP_ROOT_PATH ${WP_ROOT_PATH}"
   fi
@@ -228,17 +234,19 @@ store_s3() {
 
 create_tmp_dir() {
   TMP_DIR=$(mktemp -p ${BASEPATH}/.. -d tmp.XXXXXXXXXX)
-  echo "create tmp directory"
-  echo "TMP DIR: ${TMP_DIR}"
+  echo "create tmp directory to ${TMP_DIR}"
 }
 
 delete_tmp_dir() {
   if [ -d "${TMP_DIR:-}" ]; then
     rm -r ${TMP_DIR}
-    echo "delete tmp directory"
+    echo "delete tmp directory ${TMP_DIR}"
   fi
+  echo end backup: `date '+%Y-%m-%d %H-%M-%S'`
 }
 trap delete_tmp_dir EXIT
+
+echo start backup: `date '+%Y-%m-%d %H-%M-%S'`
 
 load_config ${1:-}
 check_config
