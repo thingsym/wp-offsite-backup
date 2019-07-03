@@ -7,6 +7,7 @@ WP Offsite Backup is a Shell script for backup WordPress to offsite.
 ## Features
 
 * Backup WordPress files and Databases
+* Compression algorithm with GNU Gzip or Zstandard
 * Store backup file to Storage Service (Amazon S3)
 * Scheduled automatic backup via Cron
 * Setting customized configuration
@@ -46,8 +47,9 @@ MAILTO=hoge@example.com
 
 * mysqldump
 * mktemp
-* tar
-* gzip
+* tar ([GNU Tar](https://www.gnu.org/software/tar/))
+* gzip ([GNU Gzip](https://www.gnu.org/software/gzip/), selective)
+* zstd ([Zstandard](https://facebook.github.io/zstd/), selective)
 * aws ([AWS Command Line Interface](https://aws.amazon.com/cli/))
 
 ## Getting Started
@@ -97,6 +99,7 @@ have fun!
 ```
 JOB_NAME="WordPress backup"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
+COMPRESS=gzip
 MAX_SAVED_FILES=12
 
 WP_ROOT_PATH=/var/www/html
@@ -104,8 +107,9 @@ DB_NAME=wordpress
 MYSQL_EXTRA_FILE=.my.cnf
 MYSQL_FILE=wordpress.sql
 
-S3_URI=
 AWS_PROFILE=
+S3_URI=
+S3_STORAGE_CLASS=STANDARD_IA
 
 EXCLUDE_EXTRA=(
   ".git"
@@ -124,6 +128,7 @@ MAX_LOG_LINES=300
 * `JOB_NAME` name of backup job
 * `BACKUP_NAME` name of backup (default: wordpress-backup-\`date +%Y-%m-%d_%H-%M-%S\`)
   * based on the backup file name e.g `wordpress-backup-2018-01-08_08-48-27`.tar.gz
+* `COMPRESS` type of compression algorithm (value: `gzip` | `zstd`)
 * `MAX_SAVED_FILES` maximum number of backup files to stored (default: `12`)
     * When the number of stored files exceeds the maximum stored number, backup files are deleted from the older update date and time.
     * Set to `0` if saving unlimitedly
@@ -131,9 +136,10 @@ MAX_LOG_LINES=300
 * `DB_NAME` name of database (default: `wordpress`)
 * `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.my.cnf`)
 * `MYSQL_FILE` name of database backup data file (default: `wordpress.sql`)
-* `S3_URI` path of a S3 bucket or prefix e.g `s3://[bucket]/[prefix]/`
 * `AWS_PROFILE` aws configure named profile (default: `default`)
   * see [Named Profiles - Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)
+* `S3_URI` path of a S3 bucket or prefix e.g `s3://[bucket]/[prefix]/`
+* `S3_STORAGE_CLASS` type of s3 storage class (default: `STANDARD_IA`, value: `STANDARD_IA` | `STANDARD`)
 * `EXCLUDE_EXTRA` list exclude files or directories
 
 Configuration example
@@ -190,30 +196,35 @@ The preset config is stored in `config` directory
 
 ## Script directory layout
 
-* bin
-  * wp-offsite-backup (core shell script)
-* config (Stores Configuration files)
-  * .my.cnf (Database configuration file)
-  * config-sample
-  * db-only-backup-config
-  * default (default configuration file)
-  * full-backup-config
-  * partial-backup-config
-  * wp-content-only-backup-config
-* LICENSE
-* log (Stores log files)
-* README.md
-* tmp.XXXXXXXXXX (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
+```
+|- bin
+|    |- wp-offsite-backup (core shell script)
+|- config (Stores Configuration files)
+|    |- .my.cnf (Database configuration file)
+|    |- .sample.my.cnf
+|    |- config-sample
+|    |- db-only-backup-config
+|    |- default (default configuration file)
+|    |- full-backup-config
+|    |- partial-backup-config
+|    |- wp-content-only-backup-config
+|- LICENSE
+|- log (Stores log files)
+|- README.md
+|- tmp.XXXXXXXXXX (Create a temporary directory automatically when starting script execution. Delete a temporary directory at the end of script execution.)
+```
 
 ## Archive directory layout
 
 Archived file format is `tar.gz`.
 
-* database (Stores database backup file)
-  * wordpress.sql
-* wp-config.php
-* wp-content
-* WordPress Core files and more...
+```
+|- database (Stores database backup file)
+|    |- wordpress.sql
+|- wp-config.php
+|- wp-content
+|- WordPress Core files and more...
+```
 
 ## How to customized configuration
 
