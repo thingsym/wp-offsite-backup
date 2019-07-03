@@ -370,6 +370,13 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.4.0
+  * test: fix test case
+  * perf: add s3 storage class option
+  * feat: add compression algorithm Zstandard
+  * perf: improve message information
+  * perf: add mysqldump options
+  * perf: change function name
 * Version 0.3.1
   * test: fix .travis.yml
   * fix: fix exit status 1 with tar
