@@ -49,7 +49,7 @@ MAILTO=hoge@example.com
 * mktemp
 * tar ([GNU Tar](https://www.gnu.org/software/tar/))
 * gzip ([GNU Gzip](https://www.gnu.org/software/gzip/), selective)
-* zstd ([Zstandard](https://facebook.github.io/zstd/), selective)
+* zstd ([Zstandard](https://facebook.github.io/zstd/), Version 1.3.8 later, selective)
 * aws ([AWS Command Line Interface](https://aws.amazon.com/cli/))
 
 ## Getting Started
@@ -216,7 +216,7 @@ The preset config is stored in `config` directory
 
 ## Archive directory layout
 
-Archived file format is `tar.gz`.
+Archived file format is `tar.gz` or `tar.zst`.
 
 ```
 |- database (Stores database backup file)
@@ -234,11 +234,19 @@ Create customized configuration as configuration name `customized-config`
 cp config/config-sample config/customized-config
 ```
 
+Create MYSQL_EXTRA_FILE as configuration name `.customized-config.my.cnf`
+
+```
+cp config/.sample.my.cnf config/.customized-config.my.cnf
+```
+
 Edit customized configuration
 
 ```
 vi config/customized-config
 ```
+
+Note: set MYSQL_EXTRA_FILE to `.customized-config.my.cnf`
 
 Run backup using customized configuration `customized-config`.
 
