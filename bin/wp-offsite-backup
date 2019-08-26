@@ -194,7 +194,7 @@ compress_gzip() {
 compress_zstd() {
   if type zstd > /dev/null 2>&1; then
     echo "compress file ... (zstd)"
-    zstd -6 --rm ${TMP_DIR}/${BACKUP_NAME}.tar -o ${TMP_DIR}/${BACKUP_NAME}.tar.zst
+    zstd -6 --rm --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar -o ${TMP_DIR}/${BACKUP_NAME}.tar.zst
     FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar.zst | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "compress file to ${BACKUP_NAME}.tar.zst (size: ${FILE_SIZE})"
   else
@@ -241,7 +241,7 @@ compress_file() {
 test_compress_file() {
   echo "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
-    if zstd --test ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
+    if zstd --test --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
       echo "success test ${BACKUP_NAME}.tar.zst for integrity"
     else
       echo "fail test ${BACKUP_NAME}.tar.zst is corrupt"
