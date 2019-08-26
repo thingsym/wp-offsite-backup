@@ -331,11 +331,11 @@ delete_tmp_dir() {
     rm -r ${TMP_DIR}
     echo "delete tmp directory ${TMP_DIR}"
   fi
-  echo end backup: `date '+%Y-%m-%d %H-%M-%S'`
+  echo end backup: `date '+%Y-%m-%d %H:%M:%S'`
 }
 trap delete_tmp_dir EXIT
 
-echo start backup: `date '+%Y-%m-%d %H-%M-%S'`
+echo start backup: `date '+%Y-%m-%d %H:%M:%S'`
 
 load_config ${1:-}
 check_config
