@@ -239,7 +239,7 @@ compress_file() {
 }
 
 test_compress_file() {
-  echo "test compressed file integrity ..."
+  echo "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
     if zstd --test ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
       echo "success test ${BACKUP_NAME}.tar.zst for integrity"

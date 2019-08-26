@@ -33,7 +33,7 @@ teardown() {
   assert_lines_match "compress file ..." 10
   assert_lines_match "gzip" 10
   assert_lines_match "compress file to wordpress-backup" 11
-  assert_lines_equal "test compressed file integrity ..." 12
+  assert_lines_equal "verifying compressed file integrity ..." 12
   assert_lines_match "success test wordpress-backup-" 13
   assert_lines_equal "Not Found aws commad" 14
   assert_lines_match "delete tmp directory" 15
