@@ -322,7 +322,7 @@ store_s3() {
 }
 
 create_tmp_dir() {
-  TMP_DIR=$(mktemp -p ${BASEPATH}/.. -d tmp.XXXXXXXXXX)
+  TMP_DIR=$(mktemp -d ${BASEPATH}/../tmp.XXXXXXXXXX)
   echo "create tmp directory to ${TMP_DIR}"
 }
 
