@@ -6,7 +6,7 @@ SKIP_VERIFY_FILE=false
 
 WP_ROOT_PATH=/var/www/html
 DB_NAME=wordpress
-MYSQL_EXTRA_FILE=.my.cnf
+MYSQL_EXTRA_FILE=.default.my.cnf
 MYSQL_FILE=wordpress.sql
 
 USER_LOCAL_BIN_PATH=
