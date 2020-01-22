@@ -3,7 +3,7 @@
 # WP Offsite Backup
 # This script is a Shell script for backup WordPress to offsite.
 # URL: https://github.com/thingsym/wp-offsite-backup
-# Version: 0.4.0
+# Version: 0.5.0
 # Author: thingsym
 # distributed under GPLv3.
 # Copyright (c) 2018 thingsym
@@ -25,7 +25,7 @@ CNF_DIR=../config
 declare -A MESSAGE
 
 usage() {
-  echo "WP Offsite Backup Version 0.2.3"
+  echo "WP Offsite Backup Version 0.5.0"
   echo "usage: $(basename ${0}) [<config>|--config|--help]"
   echo "config path: ${BASEPATH}/${CNF_DIR}"
   echo "log path: ${BASEPATH}/${LOG_DIR}"

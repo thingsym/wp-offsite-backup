@@ -383,6 +383,14 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.5.0
+  * test: fix test case
+  * perf: add user local bin path for pip install --user
+  * fix: change function name
+  * perf: add skip option that verifying compressed file integrity
+  * fix: fix error mktemp: illegal option -- p
+  * perf: add start and end timestamps
+  * perf: add option --no-progress with zstd
 * Version 0.4.0
   * test: fix test case
   * perf: add s3 storage class option
