@@ -238,7 +238,7 @@ compress_file() {
 
 }
 
-test_compress_file() {
+verify_file_integrity() {
   echo "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
     if zstd --test --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
@@ -345,7 +345,7 @@ if [ -d "${TMP_DIR}" ]; then
   archive_file
   compress_file
   if [ "${SKIP_VERIFY_FILE}" = false ] ; then
-    test_compress_file
+    verify_file_integrity
   else
     echo "Skip verifying compressed file integrity"
   fi
