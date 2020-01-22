@@ -242,26 +242,26 @@ verify_file_integrity() {
   echo "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
     if zstd --test --no-progress ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
-      echo "success test ${BACKUP_NAME}.tar.zst for integrity"
+      echo "success verifying ${BACKUP_NAME}.tar.zst for integrity"
     else
-      echo "fail test ${BACKUP_NAME}.tar.zst is corrupt"
+      echo "fail verifying ${BACKUP_NAME}.tar.zst is corrupt"
       MESSAGE=(
         ["status"]="Error"
         ["config"]="${CONFIG}"
-        ["massage"]="Fail test ${BACKUP_NAME}.tar.zst"
+        ["massage"]="Fail verifying ${BACKUP_NAME}.tar.zst"
       )
       logging
       exit 1
     fi
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
     if gzip --test ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
-      echo "success test ${BACKUP_NAME}.tar.gz for integrity"
+      echo "success verifying ${BACKUP_NAME}.tar.gz for integrity"
     else
-      echo "fail test ${BACKUP_NAME}.tar.gz is corrupt"
+      echo "fail verifying ${BACKUP_NAME}.tar.gz is corrupt"
       MESSAGE=(
         ["status"]="Error"
         ["config"]="${CONFIG}"
-        ["massage"]="Fail test ${BACKUP_NAME}.tar.gz"
+        ["massage"]="Fail verifying ${BACKUP_NAME}.tar.gz"
       )
       logging
       exit 1
