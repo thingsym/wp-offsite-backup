@@ -383,6 +383,8 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.6.0
+  * perf: add check zstd version
 * Version 0.5.0
   * test: fix test case
   * perf: add user local bin path for pip install --user
