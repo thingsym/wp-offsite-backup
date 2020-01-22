@@ -280,7 +280,7 @@ verify_file_integrity() {
 
 store_s3() {
   if ! type aws > /dev/null 2>&1; then
-    echo "Not Found aws commad"
+    echo "Not Found aws command"
     return;
   fi
 
