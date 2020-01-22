@@ -2,6 +2,7 @@ JOB_NAME="WordPress partial backup (wp-content only)"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
 COMPRESS=gzip
 MAX_SAVED_FILES=12
+SKIP_VERIFY_FILE=false
 
 WP_ROOT_PATH=/var/www/html
 DB_NAME=

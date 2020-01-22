@@ -344,7 +344,11 @@ if [ -d "${TMP_DIR}" ]; then
   dump_database
   archive_file
   compress_file
-  test_compress_file
+  if [ "${SKIP_VERIFY_FILE}" = false ] ; then
+    test_compress_file
+  else
+    echo "Skip verifying compressed file integrity"
+  fi
   store_s3
 else
   echo "Not Found tmp directory"
