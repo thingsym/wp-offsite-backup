@@ -81,7 +81,7 @@ vi config/default
 ### 5. Edit database configuration
 
 ```
-vi config/.my.cnf
+vi config/.default.my.cnf
 ```
 
 ### 6. Testing backup
@@ -101,11 +101,14 @@ JOB_NAME="WordPress backup"
 BACKUP_NAME=wordpress-backup-`date +%Y-%m-%d_%H-%M-%S`
 COMPRESS=gzip
 MAX_SAVED_FILES=12
+SKIP_VERIFY_FILE=false
 
 WP_ROOT_PATH=/var/www/html
 DB_NAME=wordpress
-MYSQL_EXTRA_FILE=.my.cnf
+MYSQL_EXTRA_FILE=.default.my.cnf
 MYSQL_FILE=wordpress.sql
+
+USER_LOCAL_BIN_PATH=
 
 AWS_PROFILE=
 S3_URI=
@@ -132,10 +135,12 @@ MAX_LOG_LINES=300
 * `MAX_SAVED_FILES` maximum number of backup files to stored (default: `12`)
     * When the number of stored files exceeds the maximum stored number, backup files are deleted from the older update date and time.
     * Set to `0` if saving unlimitedly
+* `SKIP_VERIFY_FILE` skip verifying compressed file integrity (default: `false`, value: `false` | `true`)
 * `WP_ROOT_PATH` document root of WordPress (default: `/var/www/html`)
 * `DB_NAME` name of database (default: `wordpress`)
-* `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.my.cnf`)
+* `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.default.my.cnf`)
 * `MYSQL_FILE` name of database backup data file (default: `wordpress.sql`)
+* `USER_LOCAL_BIN_PATH` path for pip install --user as ~/.local/bin (default: ``)
 * `AWS_PROFILE` aws configure named profile (default: `default`)
   * see [Named Profiles - Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)
 * `S3_URI` path of a S3 bucket or prefix e.g `s3://[bucket]/[prefix]/`
@@ -167,7 +172,7 @@ EXCLUDE_EXTRA=()
 
 ### Database Configuration
 
-Database configuration file is invisible file as dot-file. e.g `.my.cnf`
+Database configuration file is invisible file as dot-file. e.g `.default.my.cnf`
 
 ```
 [client]
@@ -200,7 +205,7 @@ The preset config is stored in `config` directory
 |- bin
 |    |- wp-offsite-backup (core shell script)
 |- config (Stores Configuration files)
-|    |- .my.cnf (Database configuration file)
+|    |- .default.my.cnf (default database configuration file)
 |    |- .sample.my.cnf
 |    |- config-sample
 |    |- db-only-backup-config
