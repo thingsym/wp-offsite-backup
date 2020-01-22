@@ -33,10 +33,16 @@ teardown() {
   assert_lines_match "zstd" 10
   assert_lines_match "compress file to wordpress-backup" 12
   assert_lines_equal "verifying compressed file integrity ..." 13
-  assert_lines_match "success test wordpress-backup-" 15
-  assert_lines_equal "Not Found aws commad" 16
-  assert_lines_match "delete tmp directory" 17
-  assert_lines_match "end backup:" 18
+  assert_lines_match "success verifying wordpress-backup-" 15
+
+  if ! type ${USER_LOCAL_BIN_PATH}aws > /dev/null 2>&1; then
+    assert_lines_equal "Not Found aws command" 16
+    assert_lines_match "delete tmp directory" 17
+    assert_lines_match "end backup:" 18
+  else
+    assert_lines_match "delete tmp directory" 16
+    assert_lines_match "end backup:" 17
+  fi
 
   assert_match "$(cat <<EXPECTED
 JOB_NAME: test.... WordPress backup
