@@ -279,7 +279,7 @@ verify_file_integrity() {
 }
 
 store_s3() {
-  if ! type aws > /dev/null 2>&1; then
+  if ! type ${USER_LOCAL_BIN_PATH}aws > /dev/null 2>&1; then
     echo "Not Found aws command"
     return;
   fi
@@ -295,10 +295,10 @@ store_s3() {
 
   echo "backup to S3 ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
-    aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
+    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
     echo "backup ${BACKUP_NAME}.tar.zst to S3"
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
-    aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
+    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
     echo "backup ${BACKUP_NAME}.tar.gz to S3"
   else
     echo "Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
@@ -311,11 +311,11 @@ store_s3() {
     exit 1
   fi
 
-  local S3_FILES=$(aws s3 ls $S3_URI | wc -l)
+  local S3_FILES=$(${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI | wc -l)
   echo "stored files to S3: ${S3_FILES} files"
 
   if [ "$MAX_SAVED_FILES" ] && [ 0 -lt "$MAX_SAVED_FILES" ] && [ "$S3_FILES" -gt "$MAX_SAVED_FILES" ] ; then
-    aws s3 ls $S3_URI | sort -n | head -n -$MAX_SAVED_FILES | awk '{ print $4 }' | xargs -I% aws s3 rm ${S3_URI}%
+    ${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI | sort -n | head -n -$MAX_SAVED_FILES | awk '{ print $4 }' | xargs -I% ${USER_LOCAL_BIN_PATH}aws s3 rm ${S3_URI}%
     echo "delete backup files in order of older update date"
     echo "stored files to S3: ${MAX_SAVED_FILES} files"
   fi
