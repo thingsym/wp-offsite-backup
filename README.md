@@ -390,6 +390,8 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.7.0
+  * perf: fix error head:illegal line count -- for FreeBSD
 * Version 0.6.0
   * perf: add check zstd version
 * Version 0.5.0
