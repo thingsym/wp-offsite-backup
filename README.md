@@ -141,6 +141,13 @@ MAX_LOG_LINES=300
 * `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.default.my.cnf`)
 * `MYSQL_FILE` name of database backup data file (default: `wordpress.sql`)
 * `USER_LOCAL_BIN_PATH` path for pip install --user as ~/.local/bin (default: ``)
+
+Note: Add / at the end of the path
+
+```
+USER_LOCAL_BIN_PATH=/home/user/.local/bin/
+```
+
 * `AWS_PROFILE` aws configure named profile (default: `default`)
   * see [Named Profiles - Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)
 * `S3_URI` path of a S3 bucket or prefix e.g `s3://[bucket]/[prefix]/`
