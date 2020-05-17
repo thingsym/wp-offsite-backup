@@ -24,6 +24,7 @@ EXCLUDE_WP_CONTENT=(
   "./wp-content/uploads/backwpup-*-backups"
   "./wp-content/uploads/backwpup-*-logs"
   "./wp-content/uploads/backwpup-*-temp"
+  "./wp-content/ai1wm-backups"
   "./wp-content/db.php"
 )
 
