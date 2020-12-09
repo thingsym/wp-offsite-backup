@@ -21,9 +21,6 @@ jobs:
       - name: Setup Bats
         uses: mig4/setup-bats@v1
 
-      - name: Install Zstd
-        run: sudo apt install zstd
-
       - name: Setup PHP v7.4
         uses: shivammathur/setup-php@v2
         with:
