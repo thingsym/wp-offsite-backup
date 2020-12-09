@@ -1,0 +1,38 @@
+name: Unit test
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  bats:
+    name: Run unit test
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Bats
+        uses: mig4/setup-bats@v1
+
+      - name: Setup PHP v7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          extensions: mbstring, intl, php-mysql
+
+      - name: Start MySQL
+        # See https://github.blog/changelog/2020-02-21-github-actions-breaking-change-ubuntu-virtual-environments-will-no-longer-start-the-mysql-service-automatically/
+        run: sudo /etc/init.d/mysql start
+
+      - name: Install wp tests
+        run: bash test/bin/install-wp-tests.sh wordpress_test root root localhost latest
+
+      - name: Run Bats test
+        run: bats test
