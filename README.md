@@ -390,10 +390,14 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.8.0
+  * perf: add --no-tablespaces option on mysqldump for MySQL 5.7.31
+  * ci: add GitHub actions, remove .travis.yml
+  * perf: add size of the folder in S3 bucket
 * Version 0.7.0
   * perf: fix error head:illegal line count -- for FreeBSD
 * Version 0.6.0
-  * perf: add check zstd version
+  * perf: add checking zstd version
 * Version 0.5.0
   * test: fix test case
   * perf: add user local bin path for pip install --user
@@ -448,4 +452,4 @@ distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 [thingsym](https://github.com/thingsym)
 
-Copyright (c) 2018 thingsym
+Copyright (c) 2018-2021 thingsym
