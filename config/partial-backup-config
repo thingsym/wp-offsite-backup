@@ -18,34 +18,27 @@ S3_STORAGE_CLASS=STANDARD_IA
 EXCLUDE_EXTRA=(
   ".git"
   ".DS_Store"
+  ".svn"
+  "/node_modules"
+  "desktop.ini"
 )
 
 EXCLUDE_WP_CONTENT=(
+  "./wp-content/upgrade"
+  "./wp-content/cache"
   "./wp-content/uploads/backwpup-*-backups"
   "./wp-content/uploads/backwpup-*-logs"
   "./wp-content/uploads/backwpup-*-temp"
   "./wp-content/ai1wm-backups"
+  "./wp-content/aiowps_backups"
   "./wp-content/db.php"
 )
 
 EXCLUDE_WP_CORE=(
-  "./index.php"
-  "./license.txt"
-  "./readme.html"
-  "./readme-*.html"
-  "./wp-activate.php"
-  "./wp-blog-header.php"
-  "./wp-comments-post.php"
-  "./wp-config-sample.php"
-  "./wp-cron.php"
-  "./wp-links-opml.php"
-  "./wp-load.php"
-  "./wp-login.php"
-  "./wp-mail.php"
-  "./wp-settings.php"
-  "./wp-signup.php"
-  "./wp-trackback.php"
-  "./xmlrpc.php"
+  "./wp-snapshots"
+  "./*.txt"
+  "./*.html"
+  "./*.php"
   "./wp-admin"
   "./wp-includes"
 )

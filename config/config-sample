@@ -18,11 +18,24 @@ S3_STORAGE_CLASS=STANDARD_IA
 EXCLUDE_EXTRA=(
   ".git"
   ".DS_Store"
+  ".svn"
+  "/node_modules"
+  "desktop.ini"
 )
 
-EXCLUDE_WP_CONTENT=()
+EXCLUDE_WP_CONTENT=(
+  "./wp-content/upgrade"
+  "./wp-content/cache"
+  "./wp-content/uploads/backwpup-*-backups"
+  "./wp-content/uploads/backwpup-*-logs"
+  "./wp-content/uploads/backwpup-*-temp"
+  "./wp-content/ai1wm-backups"
+  "./wp-content/aiowps_backups"
+)
 
-EXCLUDE_WP_CORE=()
+EXCLUDE_WP_CORE=(
+  "./wp-snapshots"
+)
 
 LOG_FILE=history.log
 LOG_FORMAT=common
