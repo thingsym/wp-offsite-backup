@@ -338,10 +338,10 @@ store_s3() {
     fi
 
     echo "delete backup files in order of older update date"
-    echo "stored files to S3: ${MAX_SAVED_FILES} files"
+    echo "Stored files to S3: ${MAX_SAVED_FILES} files"
   fi
 
-  ${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI --recursive --sum | tail -n 1 | awk '{print $3 / 1024^3 " GB"}'
+  ${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI --recursive --sum | tail -n 1 | awk '{print "Stored size: " $3 / 1024^3 " GB"}'
 }
 
 create_tmp_dir() {
