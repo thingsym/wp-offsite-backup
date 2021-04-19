@@ -19,8 +19,8 @@ fi
 
 cd $BASEPATH
 
-LOG_DIR=../log
-CNF_DIR=../config
+readonly LOG_DIR="../log"
+readonly CNF_DIR="../config"
 
 declare -A MESSAGE
 
@@ -73,7 +73,7 @@ logging() {
   fi
 
   if [ ! -f "${LOG_DIR}/${LOG_FILE}" ]; then
-    touch ${LOG_DIR}/${LOG_FILE}
+    touch "${LOG_DIR}/${LOG_FILE}"
   fi
 
   local formatted_message=""
@@ -92,10 +92,10 @@ logging() {
 
   echo -e "${formatted_message}" >> "${LOG_DIR}/${LOG_FILE}"
 
-  local LOG_LINES=$(cat ${LOG_DIR}/${LOG_FILE} | wc -l)
+  local LOG_LINES=$(cat "${LOG_DIR}/${LOG_FILE}" | wc -l)
   if [ "$MAX_LOG_LINES" ] && [ 0 -lt "$MAX_LOG_LINES" ] && [ "$LOG_LINES" -gt "$MAX_LOG_LINES" ]; then
     cat ${LOG_DIR}/${LOG_FILE} | tail -n -$MAX_LOG_LINES > ${LOG_DIR}/${LOG_FILE}.new
-    mv ${LOG_DIR}/${LOG_FILE}.new ${LOG_DIR}/${LOG_FILE}
+    mv "${LOG_DIR}/${LOG_FILE}.new" "${LOG_DIR}/${LOG_FILE}"
   fi
 }
 
@@ -105,11 +105,11 @@ load_config() {
   if [ "${1:-}" ]; then
     CONFIG=$1
   elif [ "${WP_OFFSITE_BACKUP_CONFIG:-}" ]; then
-    CONFIG=$WP_OFFSITE_BACKUP_CONFIG
+    CONFIG="$WP_OFFSITE_BACKUP_CONFIG"
   fi
 
   if [ -f "${BASEPATH}/${CNF_DIR}/${CONFIG}" ]; then
-    . ${BASEPATH}/${CNF_DIR}/${CONFIG}
+    . "${BASEPATH}/${CNF_DIR}/${CONFIG}"
     echo "load CONFIG: ${BASEPATH}/${CNF_DIR}/${CONFIG}"
 
     echo "JOB_NAME: ${JOB_NAME}"
@@ -136,12 +136,12 @@ check_config() {
 dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
     echo "dump database ..."
-    mkdir ${TMP_DIR}/database
+    mkdir "${TMP_DIR}/database"
     mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --no-tablespaces --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
-    FILE_SIZE=$(du -sh ${TMP_DIR}/database/${MYSQL_FILE} | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    FILE_SIZE=$(du -sh "${TMP_DIR}/database/${MYSQL_FILE}" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "dump database to ${MYSQL_FILE} (size: ${FILE_SIZE})"
-    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${TMP_DIR} database/${MYSQL_FILE} || [[ $? == 1 ]]
-    rm -r ${TMP_DIR}/database
+    tar -rf "${TMP_DIR}/${BACKUP_NAME}.tar" -C "${TMP_DIR}" "database/${MYSQL_FILE}" || [[ $? == 1 ]]
+    rm -r "${TMP_DIR}/database"
     echo "archive database to ${TMP_DIR}/${BACKUP_NAME}.tar"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
@@ -167,9 +167,9 @@ archive_file() {
   done
 
   if [ -d "${WP_ROOT_PATH}" ]; then
-    FILE_SIZE=$(du -sh ${WP_ROOT_PATH} | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    FILE_SIZE=$(du -sh "${WP_ROOT_PATH}" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "archive ${WP_ROOT_PATH} ... (estimated size: ${FILE_SIZE})"
-    tar -rf ${TMP_DIR}/${BACKUP_NAME}.tar -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG} || [[ $? == 1 ]]
+    tar -rf "${TMP_DIR}/${BACKUP_NAME}.tar" -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG} || [[ $? == 1 ]]
     FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "archive WordPress files to ${TMP_DIR}/${BACKUP_NAME}.tar (size: ${FILE_SIZE})"
   else
@@ -180,8 +180,8 @@ archive_file() {
 compress_gzip() {
   if type gzip > /dev/null 2>&1; then
     echo "compress file ... (gzip)"
-    gzip ${TMP_DIR}/${BACKUP_NAME}.tar
-    FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar.gz | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    gzip "${TMP_DIR}/${BACKUP_NAME}.tar"
+    FILE_SIZE=$(du -sh "${TMP_DIR}/${BACKUP_NAME}.tar.gz" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "compress file to ${BACKUP_NAME}.tar.gz (size: ${FILE_SIZE})"
   else
     echo "Not Found compress command"
@@ -200,7 +200,7 @@ compress_zstd() {
     local ZSTD_VERSION=$(zstd -V | sed 's|.*v\([0-9\.]*\).*|\1|')
 
     # zstd version 1.3.8 later
-    if version_gt $ZSTD_VERSION '1.3.7'; then
+    if version_gt "$ZSTD_VERSION" '1.3.7'; then
       # echo "$ZSTD_VERSION is greater than 1.3.7 !"
       ZSTD_OPTION="--no-progress"
     else
@@ -208,8 +208,8 @@ compress_zstd() {
     fi
 
     echo "compress file ... (zstd)"
-    zstd -6 --rm ${ZSTD_OPTION} ${TMP_DIR}/${BACKUP_NAME}.tar -o ${TMP_DIR}/${BACKUP_NAME}.tar.zst
-    FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar.zst | sed -e 's/\t//g' | sed -e 's/\/.*//g')
+    zstd -6 --rm ${ZSTD_OPTION} "${TMP_DIR}/${BACKUP_NAME}.tar" -o "${TMP_DIR}/${BACKUP_NAME}.tar.zst"
+    FILE_SIZE=$(du -sh "${TMP_DIR}/${BACKUP_NAME}.tar.zst" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo "compress file to ${BACKUP_NAME}.tar.zst (size: ${FILE_SIZE})"
   else
     echo "Not Found compress command"
@@ -255,7 +255,7 @@ compress_file() {
 verify_file_integrity() {
   echo "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
-    if zstd --test ${ZSTD_OPTION} ${TMP_DIR}/${BACKUP_NAME}.tar.zst; then
+    if zstd --test ${ZSTD_OPTION} "${TMP_DIR}/${BACKUP_NAME}.tar.zst"; then
       echo "success verifying ${BACKUP_NAME}.tar.zst for integrity"
     else
       echo "fail verifying ${BACKUP_NAME}.tar.zst is corrupt"
@@ -268,7 +268,7 @@ verify_file_integrity() {
       exit 1
     fi
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
-    if gzip --test ${TMP_DIR}/${BACKUP_NAME}.tar.gz; then
+    if gzip --test "${TMP_DIR}/${BACKUP_NAME}.tar.gz"; then
       echo "success verifying ${BACKUP_NAME}.tar.gz for integrity"
     else
       echo "fail verifying ${BACKUP_NAME}.tar.gz is corrupt"
@@ -293,7 +293,7 @@ verify_file_integrity() {
 }
 
 store_s3() {
-  if ! type ${USER_LOCAL_BIN_PATH}aws > /dev/null 2>&1; then
+  if ! type "${USER_LOCAL_BIN_PATH}aws" > /dev/null 2>&1; then
     echo "Not Found aws command"
     return;
   fi
@@ -309,10 +309,10 @@ store_s3() {
 
   echo "backup to S3 ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
-    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.zst $S3_URI
+    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} "${TMP_DIR}/${BACKUP_NAME}.tar.zst" $S3_URI
     echo "backup ${BACKUP_NAME}.tar.zst to S3"
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
-    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} ${TMP_DIR}/${BACKUP_NAME}.tar.gz $S3_URI
+    ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} "${TMP_DIR}/${BACKUP_NAME}.tar.gz" $S3_URI
     echo "backup ${BACKUP_NAME}.tar.gz to S3"
   else
     echo "Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
@@ -354,7 +354,7 @@ delete_tmp_dir() {
     rm -r ${TMP_DIR}
     echo "delete tmp directory ${TMP_DIR}"
   fi
-  echo end backup: `date '+%Y-%m-%d %H:%M:%S'`
+  echo end backup: $(date '+%Y-%m-%d %H:%M:%S')
 }
 trap delete_tmp_dir EXIT
 
