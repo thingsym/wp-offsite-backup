@@ -358,34 +358,38 @@ delete_tmp_dir() {
 }
 trap delete_tmp_dir EXIT
 
-echo start backup: `date '+%Y-%m-%d %H:%M:%S'`
+main() {
+  echo start backup: $(date '+%Y-%m-%d %H:%M:%S')
 
-OS=$(uname -o)
-
-load_config ${1:-}
-check_config
-create_tmp_dir
-if [ -d "${TMP_DIR}" ]; then
-  dump_database
-  archive_file
-  compress_file
-  if [ "${SKIP_VERIFY_FILE}" = false ] ; then
-    verify_file_integrity
+  load_config "${1:-}"
+  check_config
+  create_tmp_dir
+  if [ -d "${TMP_DIR}" ]; then
+    dump_database
+    archive_file
+    compress_file
+    if [ "${SKIP_VERIFY_FILE}" = false ] ; then
+      verify_file_integrity
+    else
+      echo "Skip verifying compressed file integrity"
+    fi
+    store_s3
   else
-    echo "Skip verifying compressed file integrity"
+    echo "Not Found tmp directory"
+    exit 1
   fi
-  store_s3
-else
-  echo "Not Found tmp directory"
-  exit 1
-fi
 
-MESSAGE=(
-  ["status"]="Success"
-  ["config"]="${CONFIG}"
-  ["massage"]="WordPress Backup complete!"
-)
+  MESSAGE=(
+    ["status"]="Success"
+    ["config"]="${CONFIG}"
+    ["message"]="WordPress Backup complete!"
+  )
 
-logging
+  logging
+}
+
+readonly OS=$(uname -o)
+
+main
 
 exit 0
