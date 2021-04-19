@@ -76,21 +76,21 @@ logging() {
     touch ${LOG_DIR}/${LOG_FILE}
   fi
 
-  local formatted_massage=""
+  local formatted_message=""
 
   if [ "${LOG_FORMAT:-}" = "ltsv" ]; then
-    formatted_massage+="time:"$(date '+%Y-%m-%d %H:%M:%S')""
-    formatted_massage+="\tstatus:${MESSAGE[status]}"
-    formatted_massage+="\tconfig:${MESSAGE[config]}"
-    formatted_massage+="\tmassage:${MESSAGE[massage]}"
+    formatted_message+="time:"$(date '+%Y-%m-%d %H:%M:%S')""
+    formatted_message+="\tstatus:${MESSAGE[status]}"
+    formatted_message+="\tconfig:${MESSAGE[config]}"
+    formatted_message+="\tmessage:${MESSAGE[message]}"
   else
-    formatted_massage+="["$(date '+%Y-%m-%d %H:%M:%S')"]"
-    formatted_massage+=" [${MESSAGE[status]}]"
-    formatted_massage+=" [${MESSAGE[config]}]"
-    formatted_massage+=" ${MESSAGE[massage]}"
+    formatted_message+="["$(date '+%Y-%m-%d %H:%M:%S')"]"
+    formatted_message+=" [${MESSAGE[status]}]"
+    formatted_message+=" [${MESSAGE[config]}]"
+    formatted_message+=" ${MESSAGE[message]}"
   fi
 
-  echo -e "${formatted_massage}" >> ${LOG_DIR}/${LOG_FILE}
+  echo -e "${formatted_message}" >> "${LOG_DIR}/${LOG_FILE}"
 
   local LOG_LINES=$(cat ${LOG_DIR}/${LOG_FILE} | wc -l)
   if [ "$MAX_LOG_LINES" ] && [ 0 -lt "$MAX_LOG_LINES" ] && [ "$LOG_LINES" -gt "$MAX_LOG_LINES" ]; then
@@ -126,7 +126,7 @@ check_config() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not Found WP_ROOT_PATH $WP_ROOT_PATH"
+      ["message"]="Not Found WP_ROOT_PATH $WP_ROOT_PATH"
     )
     logging
     exit 1
@@ -188,7 +188,7 @@ compress_gzip() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not found compress command"
+      ["message"]="Not found compress command"
     )
     logging
     exit 1
@@ -216,7 +216,7 @@ compress_zstd() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not found compress command"
+      ["message"]="Not found compress command"
     )
     logging
     exit 1
@@ -229,7 +229,7 @@ compress_file() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not Found ${BACKUP_NAME}.tar"
+      ["message"]="Not Found ${BACKUP_NAME}.tar"
     )
     logging
     exit 1
@@ -244,7 +244,7 @@ compress_file() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not found COMPRESS type"
+      ["message"]="Not found COMPRESS type"
     )
     logging
     exit 1
@@ -262,7 +262,7 @@ verify_file_integrity() {
       MESSAGE=(
         ["status"]="Error"
         ["config"]="${CONFIG}"
-        ["massage"]="Fail verifying ${BACKUP_NAME}.tar.zst"
+        ["message"]="Fail verifying ${BACKUP_NAME}.tar.zst"
       )
       logging
       exit 1
@@ -275,7 +275,7 @@ verify_file_integrity() {
       MESSAGE=(
         ["status"]="Error"
         ["config"]="${CONFIG}"
-        ["massage"]="Fail verifying ${BACKUP_NAME}.tar.gz"
+        ["message"]="Fail verifying ${BACKUP_NAME}.tar.gz"
       )
       logging
       exit 1
@@ -285,7 +285,7 @@ verify_file_integrity() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not Found compressed file ${BACKUP_NAME}.tar.(zst|gz) (${COMPRESS})"
+      ["message"]="Not Found compressed file ${BACKUP_NAME}.tar.(zst|gz) (${COMPRESS})"
     )
     logging
     exit 1
@@ -319,7 +319,7 @@ store_s3() {
     MESSAGE=(
       ["status"]="Error"
       ["config"]="${CONFIG}"
-      ["massage"]="Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
+      ["message"]="Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
     )
     logging
     exit 1
