@@ -389,6 +389,13 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.9.0
+  * add backup testing config
+  * fix exclude with config
+  * add double quotes
+  * add main function
+  * fix typo
+  * fix label
 * Version 0.8.0
   * perf: add --no-tablespaces option on mysqldump for MySQL 5.7.31
   * ci: add GitHub actions, remove .travis.yml
