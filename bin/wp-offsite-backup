@@ -390,6 +390,6 @@ main() {
 
 readonly OS=$(uname -o)
 
-main
+main "${1:-}"
 
 exit 0
