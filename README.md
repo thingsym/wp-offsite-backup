@@ -1,7 +1,5 @@
 # WP Offsite Backup
 
-[![Build Status](https://travis-ci.org/thingsym/wp-offsite-backup.svg?branch=master)](https://travis-ci.org/thingsym/wp-offsite-backup)
-
 WP Offsite Backup is a Shell script for backup WordPress to offsite.
 
 ## Features
@@ -214,6 +212,7 @@ The preset config is stored in `config` directory
 |- config (Stores Configuration files)
 |    |- .default.my.cnf (default database configuration file)
 |    |- .sample.my.cnf
+|    |- backup-testing
 |    |- config-sample
 |    |- db-only-backup-config
 |    |- default (default configuration file)
@@ -323,7 +322,7 @@ There are two log formats, `common` and `ltsv`.
 The format of the `common` log is as follows.
 
 ```
-[{%Y-%m-%d %H:%M:%S}] [status] [config] massage
+[{%Y-%m-%d %H:%M:%S}] [status] [config] message
 ```
 
 Example log format is as follows.
@@ -335,13 +334,13 @@ Example log format is as follows.
 The format of the `ltsv` log format is as follows.
 
 ```
-time:%Y-%m-%d %H:%M:%S\tstatus:status\tconfig:config"\tmassage:massage
+time:%Y-%m-%d %H:%M:%S\tstatus:status\tconfig:config"\tmessage:message
 ```
 
 Example log format is as follows.
 
 ```
-time:2018-02-20 11:55:24	status:Success	config:default	massage:WordPress Backup complete!
+time:2018-02-20 11:55:24	status:Success	config:default	message:WordPress Backup complete!
 ```
 
 Reference: [Labeled Tab-separated Values](http://ltsv.org/)
