@@ -110,7 +110,7 @@ load_config() {
 
   if [ -f "${BASEPATH}/${CNF_DIR}/${CONFIG}" ]; then
     . "${BASEPATH}/${CNF_DIR}/${CONFIG}"
-    echo "load CONFIG: ${BASEPATH}/${CNF_DIR}/${CONFIG}"
+    echo `print_date` "load CONFIG: ${BASEPATH}/${CNF_DIR}/${CONFIG}"
 
     echo "JOB_NAME: ${JOB_NAME}"
     echo "CONFIG: ${CONFIG}"
@@ -135,14 +135,14 @@ check_config() {
 
 dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
-    echo "dump database ..."
+    echo `print_date` "dump database ..."
     mkdir "${TMP_DIR}/database"
     mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --no-tablespaces --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
     FILE_SIZE=$(du -sh "${TMP_DIR}/database/${MYSQL_FILE}" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
-    echo "dump database to ${MYSQL_FILE} (size: ${FILE_SIZE})"
+    echo `print_date` "dump database to ${MYSQL_FILE} (size: ${FILE_SIZE})"
     tar -rf "${TMP_DIR}/${BACKUP_NAME}.tar" -C "${TMP_DIR}" "database/${MYSQL_FILE}" || [[ $? == 1 ]]
     rm -r "${TMP_DIR}/database"
-    echo "archive database to ${TMP_DIR}/${BACKUP_NAME}.tar"
+    echo `print_date` "archive database to ${TMP_DIR}/${BACKUP_NAME}.tar"
   else
     echo "Not Found MYSQL_EXTRA_FILE ${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}"
   fi
@@ -168,10 +168,10 @@ archive_file() {
 
   if [ -d "${WP_ROOT_PATH}" ]; then
     FILE_SIZE=$(du -sh "${WP_ROOT_PATH}" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
-    echo "archive ${WP_ROOT_PATH} ... (estimated size: ${FILE_SIZE})"
+    echo `print_date` "archive ${WP_ROOT_PATH} ... (estimated size: ${FILE_SIZE})"
     tar -rf "${TMP_DIR}/${BACKUP_NAME}.tar" -C ${WP_ROOT_PATH} . ${EXCLUDE_ARG} || [[ $? == 1 ]]
     FILE_SIZE=$(du -sh ${TMP_DIR}/${BACKUP_NAME}.tar | sed -e 's/\t//g' | sed -e 's/\/.*//g')
-    echo "archive WordPress files to ${TMP_DIR}/${BACKUP_NAME}.tar (size: ${FILE_SIZE})"
+    echo `print_date` "archive WordPress files to ${TMP_DIR}/${BACKUP_NAME}.tar (size: ${FILE_SIZE})"
   else
     echo "Not Found WP_ROOT_PATH ${WP_ROOT_PATH}"
   fi
@@ -179,10 +179,10 @@ archive_file() {
 
 compress_gzip() {
   if type gzip > /dev/null 2>&1; then
-    echo "compress file ... (gzip)"
+    echo `print_date` "compress file ... (gzip)"
     gzip "${TMP_DIR}/${BACKUP_NAME}.tar"
     FILE_SIZE=$(du -sh "${TMP_DIR}/${BACKUP_NAME}.tar.gz" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
-    echo "compress file to ${BACKUP_NAME}.tar.gz (size: ${FILE_SIZE})"
+    echo `print_date` "compress file to ${BACKUP_NAME}.tar.gz (size: ${FILE_SIZE})"
   else
     echo "Not Found compress command"
     MESSAGE=(
@@ -207,10 +207,10 @@ compress_zstd() {
       ZSTD_OPTION=""
     fi
 
-    echo "compress file ... (zstd)"
+    echo `print_date` "compress file ... (zstd)"
     zstd -6 --rm ${ZSTD_OPTION} "${TMP_DIR}/${BACKUP_NAME}.tar" -o "${TMP_DIR}/${BACKUP_NAME}.tar.zst"
     FILE_SIZE=$(du -sh "${TMP_DIR}/${BACKUP_NAME}.tar.zst" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
-    echo "compress file to ${BACKUP_NAME}.tar.zst (size: ${FILE_SIZE})"
+    echo `print_date` "compress file to ${BACKUP_NAME}.tar.zst (size: ${FILE_SIZE})"
   else
     echo "Not Found compress command"
     MESSAGE=(
@@ -253,7 +253,7 @@ compress_file() {
 }
 
 verify_file_integrity() {
-  echo "verifying compressed file integrity ..."
+  echo `print_date` "verifying compressed file integrity ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
     if zstd --test ${ZSTD_OPTION} "${TMP_DIR}/${BACKUP_NAME}.tar.zst"; then
       echo "success verifying ${BACKUP_NAME}.tar.zst for integrity"
@@ -269,9 +269,9 @@ verify_file_integrity() {
     fi
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
     if gzip --test "${TMP_DIR}/${BACKUP_NAME}.tar.gz"; then
-      echo "success verifying ${BACKUP_NAME}.tar.gz for integrity"
+      echo `print_date` "success verifying ${BACKUP_NAME}.tar.gz for integrity"
     else
-      echo "fail verifying ${BACKUP_NAME}.tar.gz is corrupt"
+      echo `print_date` "fail verifying ${BACKUP_NAME}.tar.gz is corrupt"
       MESSAGE=(
         ["status"]="Error"
         ["config"]="${CONFIG}"
@@ -304,16 +304,16 @@ store_s3() {
 
   if [ "$AWS_PROFILE" ]; then
     export AWS_DEFAULT_PROFILE=$AWS_PROFILE
-    echo "set aws profile: ${AWS_PROFILE}"
+    echo `print_date` "set aws profile: ${AWS_PROFILE}"
   fi
 
-  echo "backup to S3 ..."
+  echo `print_date` "backup to S3 ..."
   if [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.zst" ]; then
     ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} "${TMP_DIR}/${BACKUP_NAME}.tar.zst" $S3_URI
-    echo "backup ${BACKUP_NAME}.tar.zst to S3"
+    echo `print_date` "backup ${BACKUP_NAME}.tar.zst to S3"
   elif [ -f "${TMP_DIR}/${BACKUP_NAME}.tar.gz" ]; then
     ${USER_LOCAL_BIN_PATH}aws s3 mv --no-progress --storage-class ${S3_STORAGE_CLASS:-STANDARD_IA} "${TMP_DIR}/${BACKUP_NAME}.tar.gz" $S3_URI
-    echo "backup ${BACKUP_NAME}.tar.gz to S3"
+    echo `print_date` "backup ${BACKUP_NAME}.tar.gz to S3"
   else
     echo "Not Found S3 backup file ${BACKUP_NAME}.tar.(zst|gz)"
     MESSAGE=(
@@ -326,7 +326,7 @@ store_s3() {
   fi
 
   local S3_FILES=$(${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI | wc -l)
-  echo "stored files to S3: ${S3_FILES} files"
+  echo `print_date` "stored files to S3: ${S3_FILES} files"
 
   if [ "$MAX_SAVED_FILES" ] && [ 0 -lt "$MAX_SAVED_FILES" ] && [ "$S3_FILES" -gt "$MAX_SAVED_FILES" ] ; then
 
@@ -337,8 +337,8 @@ store_s3() {
       ${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI | sort -n | head -n -${MAX_SAVED_FILES} | awk '{ print $4 }' | xargs -I% ${USER_LOCAL_BIN_PATH}aws s3 rm ${S3_URI}%
     fi
 
-    echo "delete backup files in order of older update date"
-    echo "Stored files to S3: ${MAX_SAVED_FILES} files"
+    echo `print_date` "delete backup files in order of older update date"
+    echo `print_date` "Stored files to S3: ${MAX_SAVED_FILES} files"
   fi
 
   ${USER_LOCAL_BIN_PATH}aws s3 ls $S3_URI --recursive --sum | tail -n 1 | awk '{print "Stored size: " $3 / 1024^3 " GB"}'
@@ -346,20 +346,24 @@ store_s3() {
 
 create_tmp_dir() {
   TMP_DIR=$(mktemp -d ${BASEPATH}/../tmp.XXXXXXXXXX)
-  echo "create tmp directory to ${TMP_DIR}"
+  echo `print_date` "create tmp directory to ${TMP_DIR}"
 }
 
 delete_tmp_dir() {
   if [ -d "${TMP_DIR:-}" ]; then
     rm -r ${TMP_DIR}
-    echo "delete tmp directory ${TMP_DIR}"
+    echo `print_date` "delete tmp directory ${TMP_DIR}"
   fi
-  echo end backup: $(date '+%Y-%m-%d %H:%M:%S')
+  echo `print_date` end backup
 }
 trap delete_tmp_dir EXIT
 
+print_date() {
+  echo [$(date '+%Y-%m-%d %H:%M:%S')]
+}
+
 main() {
-  echo start backup: $(date '+%Y-%m-%d %H:%M:%S')
+  echo `print_date` start backup
 
   load_config "${1:-}"
   check_config
