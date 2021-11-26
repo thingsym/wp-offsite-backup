@@ -389,6 +389,11 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 
 ## Changelog
 
+* Version 0.9.1
+  * fix test case
+  * add date and time to message
+  * add timeout-minutes to workflows
+
 * Version 0.9.0
   * add backup testing config
   * fix exclude with config
