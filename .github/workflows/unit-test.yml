@@ -37,7 +37,7 @@ jobs:
           extensions: mbstring, intl, php-mysql
 
       - name: Install wp tests
-        run: bash bin/install-wp-tests.sh wordpress_test root root 0.0.0.0:3306 $WP_VERSION
+        run: bash test/bin/install-wp-tests.sh wordpress_test root root 0.0.0.0:3306 $WP_VERSION
 
       - name: Run Bats test
         run: bats test
