@@ -30,6 +30,9 @@ jobs:
       - name: Setup Bats
         uses: mig4/setup-bats@v1
 
+      - name: Install SVN
+        run: sudo apt-get install -y subversion
+
       - name: Setup PHP v8.4
         uses: shivammathur/setup-php@v2
         with:
