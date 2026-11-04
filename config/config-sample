@@ -9,6 +9,8 @@ DB_NAME=wordpress
 MYSQL_EXTRA_FILE=.sample.my.cnf
 MYSQL_FILE=wordpress.sql
 
+DOCKER_DB_CONTAINER_NAME=
+
 USER_LOCAL_BIN_PATH=
 
 AWS_PROFILE=

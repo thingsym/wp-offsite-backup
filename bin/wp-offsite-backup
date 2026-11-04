@@ -137,7 +137,11 @@ dump_database() {
   if [ -f "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" ]; then
     echo `print_date` "dump database ..."
     mkdir "${TMP_DIR}/database"
-    mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --no-tablespaces --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
+    if [ ! -z "$DOCKER_DB_CONTAINER_NAME" ]; then
+      docker exec -i ${DOCKER_DB_CONTAINER_NAME} mysqldump --defaults-extra-file=/dev/stdin --quote-names --skip-lock-tables --single-transaction --no-tablespaces --add-drop-table ${DB_NAME} < "${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE}" > ${TMP_DIR}/database/${MYSQL_FILE}
+    else
+      mysqldump --defaults-extra-file=${BASEPATH}/${CNF_DIR}/${MYSQL_EXTRA_FILE} --quote-names --skip-lock-tables --single-transaction --no-tablespaces --add-drop-table ${DB_NAME} > ${TMP_DIR}/database/${MYSQL_FILE}
+    fi
     FILE_SIZE=$(du -sh "${TMP_DIR}/database/${MYSQL_FILE}" | sed -e 's/\t//g' | sed -e 's/\/.*//g')
     echo `print_date` "dump database to ${MYSQL_FILE} (size: ${FILE_SIZE})"
     tar -rf "${TMP_DIR}/${BACKUP_NAME}.tar" -C "${TMP_DIR}" "database/${MYSQL_FILE}" || [[ $? == 1 ]]
