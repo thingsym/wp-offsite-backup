@@ -106,6 +106,8 @@ DB_NAME=wordpress
 MYSQL_EXTRA_FILE=.default.my.cnf
 MYSQL_FILE=wordpress.sql
 
+DOCKER_DB_CONTAINER_NAME=
+
 USER_LOCAL_BIN_PATH=
 
 AWS_PROFILE=
@@ -138,6 +140,7 @@ MAX_LOG_LINES=300
 * `DB_NAME` name of database (default: `wordpress`)
 * `MYSQL_EXTRA_FILE` name of mysql database configuration file (default: `.default.my.cnf`)
 * `MYSQL_FILE` name of database backup data file (default: `wordpress.sql`)
+* `DOCKER_DB_CONTAINER_NAME` name of database docker container (default: ``)
 * `USER_LOCAL_BIN_PATH` path for pip install --user as ~/.local/bin (default: ``)
 
 Note: Add / at the end of the path
@@ -388,6 +391,9 @@ Small patches and bug reports can be submitted a issue tracker in GitHub. Forkin
 5. Create new Pull Request
 
 ## Changelog
+
+* Version 0.9.2
+  * database dump compatible with Docker
 
 * Version 0.9.1
   * fix test case
